@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>서구노인종합복지관 제54회 어버이날 기념 작품공모전</title>
+  <meta name="description" content="서구노인종합복지관 제54회 어버이날 기념 작품공모전 블라인드 투표 사이트" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primary: #1e3a5f;
+      --color-primary-dark: #14263f;
+      --color-primary-light: #2c5282;
+      --color-accent: #c69963;
+      --color-accent-dark: #a67c48;
+      --color-bg: #f7f8fa;
+      --color-bg-card: #ffffff;
+      --color-border: #e2e8f0;
+      --color-border-strong: #cbd5e0;
+      --color-text: #1a202c;
+      --color-text-muted: #4a5568;
+      --color-text-light: #718096;
+      --color-success: #2f855a;
+      --color-error: #c53030;
+      --color-warning: #b7791f;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --transition: all 0.2s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, textarea, select { font-family: inherit; font-size: 15px; }
+    img { max-width: 100%; display: block; }
+
+    /* Layout */
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--color-bg-card);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--color-text-light);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 14px;
+      transition: var(--transition);
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--color-primary-dark); }
+
+    .btn-secondary {
+      background: var(--color-bg-card);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+    .btn-secondary:hover { background: var(--color-bg); border-color: var(--color-border-strong); }
+
+    .btn-accent {
+      background: var(--color-accent);
+      color: #fff;
+    }
+    .btn-accent:hover { background: var(--color-accent-dark); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text-muted);
+    }
+    .btn-ghost:hover { background: var(--color-bg); color: var(--color-text); }
+
+    .btn-danger {
+      background: #fff;
+      color: var(--color-error);
+      border-color: #fed7d7;
+    }
+    .btn-danger:hover { background: #fef5f5; }
+
+    .btn-lg { padding: 14px 26px; font-size: 16px; }
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
+    .btn-block { width: 100%; }
+
+    .main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    /* Home / Category selection */
+    .hero {
+      text-align: center;
+      padding: 28px 16px 40px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(30, 58, 95, 0.06);
+      color: var(--color-primary);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -1px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: var(--color-text-muted);
+      max-width: 620px;
+      margin: 0 auto;
+      font-size: 15px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 3px;
+      height: 16px;
+      background: var(--color-primary);
+      border-radius: 2px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .category-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-card:hover {
+      border-color: var(--color-primary-light);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .category-card.disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .category-card.disabled:hover { transform: none; box-shadow: none; }
+
+    .category-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .category-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(30, 58, 95, 0.08);
+      color: var(--color-primary);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+    }
+
+    .category-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.3px;
+    }
+    .badge-active { background: #e6f4ea; color: var(--color-success); }
+    .badge-draft { background: #f1f3f5; color: var(--color-text-light); }
+    .badge-completed { background: #ebeaff; color: #4c51bf; }
+
+    .category-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .category-card .sub {
+      font-size: 13px;
+      color: var(--color-text-light);
+      margin-bottom: 16px;
+    }
+
+    .category-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--color-text-light);
+      font-weight: 500;
+    }
+
+    /* Voter view */
+    .vote-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .back-link:hover { color: var(--color-primary); }
+
+    .round-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-primary);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .progress-wrap {
+      margin-bottom: 28px;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 6px;
+      background: var(--color-border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+      transition: width 0.4s ease;
+      border-radius: 100px;
+    }
+
+    .match-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .entry-card {
+      background: var(--color-bg-card);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      cursor: pointer;
+      min-height: 320px;
+    }
+
+    .entry-card:hover {
+      border-color: var(--color-primary-light);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .entry-card.selected {
+      border-color: var(--color-primary);
+      background: rgba(30, 58, 95, 0.03);
+    }
+
+    .entry-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-accent-dark);
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+
+    .entry-poem {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    .entry-poem .line {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .entry-poem .char {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .entry-poem .text {
+      font-size: 16px;
+      color: var(--color-text);
+      padding-top: 3px;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .entry-letter-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 12px;
+    }
+    .entry-letter-body {
+      font-size: 15px;
+      color: var(--color-text);
+      white-space: pre-wrap;
+      word-break: keep-all;
+      line-height: 1.7;
+      flex: 1;
+      overflow-y: auto;
+      max-height: 460px;
+    }
+
+    .entry-photo {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
+      background: var(--color-bg);
+    }
+    .entry-photo-caption {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      flex: 1;
+      word-break: keep-all;
+    }
+
+    .vs-divider {
+      display: grid;
+      place-items: center;
+      position: relative;
+      min-width: 50px;
+    }
+    .vs-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+      font-weight: 900;
+      font-size: 18px;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+      letter-spacing: 0.5px;
+    }
+
+    .vote-action {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .state-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 64px 32px;
+      text-align: center;
+    }
+    .state-card .emoji {
+      font-size: 40px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .state-card h3 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--color-text);
+    }
+    .state-card p {
+      color: var(--color-text-muted);
+      max-width: 480px;
+      margin: 0 auto 20px;
+    }
+
+    .finalists {
+      margin-top: 28px;
+      display: grid;
+      gap: 16px;
+    }
+    .finalist-row {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+    }
+    .finalist-rank {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .rank-1 { background: linear-gradient(135deg, #fde68a, #d97706); color: #fff; }
+    .rank-2 { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #fff; }
+    .rank-3 { background: linear-gradient(135deg, #fcd9b6, #b97745); color: #fff; }
+    .rank-other { background: var(--color-bg); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .modal-lg { max-width: 960px; }
+    .modal-header {
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      display: grid; place-items: center;
+      color: var(--color-text-light);
+      font-size: 20px;
+    }
+    .modal-close:hover { background: var(--color-bg); color: var(--color-text); }
+    .modal-body { padding: 24px 28px; overflow-y: auto; flex: 1; }
+    .modal-footer {
+      padding: 18px 28px;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Forms */
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      font-size: 15px;
+      color: var(--color-text);
+      transition: var(--transition);
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.08);
+    }
+    .form-textarea { resize: vertical; min-height: 90px; font-family: inherit; }
+    .form-hint { font-size: 12px; color: var(--color-text-light); margin-top: 6px; }
+
+    .poem-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 12px;
+      align-items: center;
+    }
+    .poem-char-label {
+      font-weight: 700;
+      color: var(--color-primary);
+      background: rgba(30, 58, 95, 0.06);
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    /* Admin */
+    .admin-tabs {
+      display: flex;
+      gap: 2px;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+    .admin-tab {
+      padding: 12px 18px;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      font-size: 14px;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .admin-tab.active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .admin-section {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .admin-section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .admin-section-head h4 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .admin-section-head .counter {
+      font-size: 13px;
+      color: var(--color-text-light);
+    }
+
+    .entry-list {
+      display: grid;
+      gap: 10px;
+    }
+    .entry-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 12px 14px;
+      background: var(--color-bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+    .entry-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--color-border);
+    }
+    .entry-item-text {
+      min-width: 0;
+      overflow: hidden;
+    }
+    .entry-item-text .ttl {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .entry-item-text .prv {
+      font-size: 12px;
+      color: var(--color-text-light);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .entry-item-actions { display: flex; gap: 6px; }
+
+    .bracket-info {
+      background: rgba(30, 58, 95, 0.04);
+      border: 1px solid rgba(30, 58, 95, 0.12);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .bracket-info strong { color: var(--color-primary); font-weight: 600; }
+
+    .rounds-list {
+      display: grid;
+      gap: 10px;
+    }
+    .round-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .round-card.active {
+      background: rgba(30, 58, 95, 0.04);
+      border-color: var(--color-primary);
+    }
+    .round-card.done { opacity: 0.7; }
+
+    .round-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .round-info-block .name { font-weight: 600; font-size: 14px; }
+    .round-info-block .meta { font-size: 12px; color: var(--color-text-light); }
+
+    .match-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .match-row {
+      display: grid;
+      grid-template-columns: 40px 1fr auto 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+    .match-row .m-no {
+      color: var(--color-text-light);
+      font-weight: 600;
+      text-align: center;
+    }
+    .match-side {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .match-side.winner { color: var(--color-success); font-weight: 600; }
+    .match-side .name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+    .match-side .vote-count {
+      background: var(--color-bg);
+      color: var(--color-text-muted);
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .match-side.winner .vote-count { background: #e6f4ea; color: var(--color-success); }
+    .match-row .vs { color: var(--color-text-light); font-size: 11px; }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 200;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--color-text);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      min-width: 240px;
+      max-width: 360px;
+      box-shadow: var(--shadow-lg);
+      pointer-events: auto;
+      animation: slideIn 0.3s ease;
+    }
+    .toast.success { background: var(--color-success); }
+    .toast.error { background: var(--color-error); }
+    .toast.warning { background: var(--color-warning); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Loading & states */
+    .loading {
+      display: grid;
+      place-items: center;
+      min-height: 300px;
+      color: var(--color-text-light);
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--color-border);
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .config-alert {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      color: #7c2d12;
+    }
+    .config-alert h4 {
+      font-size: 15px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .config-alert p { font-size: 14px; line-height: 1.6; }
+    .config-alert code {
+      background: rgba(124, 45, 18, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      background: var(--color-bg-card);
+      padding: 20px 24px;
+      text-align: center;
+      color: var(--color-text-light);
+      font-size: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .header-inner { padding: 12px 16px; }
+      .brand-text h1 { font-size: 14px; }
+      .brand-text p { font-size: 11px; }
+      .main { padding: 20px 16px 48px; }
+      .hero h2 { font-size: 24px; }
+      .category-grid { grid-template-columns: 1fr; }
+      .match-wrap {
+        grid-template-columns: 1fr;
+      }
+      .vs-divider {
+        padding: 12px 0;
+      }
+      .entry-card { min-height: auto; padding: 20px; }
+      .btn-lg { padding: 12px 20px; font-size: 15px; }
+    }
+
+    /* Utility */
+    .hidden { display: none !important; }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mb-16 { margin-bottom: 16px; }
+    .text-center { text-align: center; }
+    .text-muted { color: var(--color-text-muted); }
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .flex-gap { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand" id="brand">
+          <div class="brand-mark">제54</div>
+          <div class="brand-text">
+            <h1>어버이날 기념 작품공모전</h1>
+            <p>서구노인종합복지관 · 블라인드 투표</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-ghost btn-sm" id="admin-btn">관리자 모드</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main" id="main">
+      <div class="loading"><div class="spinner"></div></div>
+    </main>
+
+    <footer class="footer">
+      © 서구노인종합복지관 · 제54회 어버이날 기념 작품공모전
+    </footer>
+  </div>
+
+  <!-- Admin login modal -->
+  <div class="modal-backdrop" id="admin-login-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>관리자 로그인</h3>
+        <button class="modal-close" data-close-modal="admin-login-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">관리자 비밀번호</label>
+          <input type="password" class="form-input" id="admin-password-input" placeholder="비밀번호를 입력하세요" />
+          <div class="form-hint">초기 비밀번호는 <code>admin1234</code> 입니다. (파일에서 변경 가능)</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal="admin-login-modal">취소</button>
+        <button class="btn btn-primary" id="admin-login-submit">로그인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add entry modal -->
+  <div class="modal-backdrop" id="add-entry-modal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3 id="add-entry-title">작품 등록</h3>
+        <button class="modal-close" data-close-modal="add-entry-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="add-entry-body">
+        <!-- dynamic -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal="add-entry-modal">취소</button>
+        <button class="btn btn-primary" id="add-entry-submit">등록하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview modal -->
+  <div class="modal-backdrop" id="preview-modal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3>작품 미리보기</h3>
+        <button class="modal-close" data-close-modal="preview-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="preview-body">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal="preview-modal">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm modal -->
+  <div class="modal-backdrop" id="confirm-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="confirm-title">확인</h3>
+        <button class="modal-close" data-close-modal="confirm-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal="confirm-modal">취소</button>
+        <button class="btn btn-primary" id="confirm-yes">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module">
+    // =================================================================
+    //  서구노인종합복지관 제54회 어버이날 기념 작품공모전 투표 사이트
+    //  - Single-file implementation with Firebase Firestore backend
+    //  - Admin mode + Voter mode
+    //  - Tournament with random seeding
+    // =================================================================
+
+    // ---- CONFIGURATION -----------------------------------------------
+    // 여기에 Firebase 콘솔에서 복사한 설정값을 넣어주세요.
+    // README.md 의 "Firebase 설정" 섹션을 참고하세요.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjuzilWblOfaawPPXQYDtVsi74VnZ0PRA",
+      authDomain: "seogunoincontest.firebaseapp.com",
+      projectId: "seogunoincontest",
+      storageBucket: "seogunoincontest.firebasestorage.app",
+      messagingSenderId: "977995795897",
+      appId: "1:977995795897:web:566a2cd3b1d824210efa68"
+    };
+
+    // 관리자 비밀번호 (원하는 값으로 변경하세요)
+    const ADMIN_PASSWORD = "admin1234";
+
+    const FIREBASE_CONFIGURED = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_");
+
+    // ---- CATEGORY DEFINITIONS ----------------------------------------
+    const CATEGORIES = [
+      { id: "poem-offline",   name: "어버이날 4행시",  source: "현장접수",  type: "poem",    icon: "✍️" },
+      { id: "poem-online",    name: "어버이날 4행시",  source: "온라인접수", type: "poem",    icon: "📝" },
+      { id: "photo-offline",  name: "사진 공모전",       source: "현장접수",  type: "photo",   icon: "📷" },
+      { id: "photo-online",   name: "사진 공모전",       source: "온라인접수", type: "photo",   icon: "🖼️" },
+      { id: "letter-offline", name: "가장 따뜻한 편지", source: "현장접수",  type: "letter",  icon: "💌" },
+      { id: "letter-online",  name: "가장 따뜻한 편지", source: "온라인접수", type: "letter",  icon: "📮" },
+    ];
+
+    // 4행시 주제 (어/버/이/날)
+    const POEM_CHARS = ["어", "버", "이", "날"];
+
+    // ---- FIREBASE INIT -----------------------------------------------
+    let db = null;
+    let usingLocalMode = !FIREBASE_CONFIGURED;
+
+    async function initFirebase() {
+      if (!FIREBASE_CONFIGURED) {
+        console.warn("[공모전] Firebase 미설정 — 로컬 모드로 동작합니다.");
+        return;
+      }
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+        const { getFirestore } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        window.__firebaseModules = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      } catch (e) {
+        console.error("Firebase 초기화 실패:", e);
+        usingLocalMode = true;
+      }
+    }
+
+    // ---- STORAGE LAYER -----------------------------------------------
+    // Unified API: localStorage (fallback) or Firestore (primary)
+    const LOCAL_KEY = "seogu-elder-contest-v1";
+
+    function readLocal() {
+      try {
+        const raw = localStorage.getItem(LOCAL_KEY);
+        if (!raw) return { categories: {} };
+        return JSON.parse(raw);
+      } catch { return { categories: {} }; }
+    }
+    function writeLocal(data) {
+      try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch {}
+    }
+
+    // Category state structure (in Firestore, one document per category at /categories/{id}):
+    //   {
+    //     id, name, source, type,
+    //     entries: [{ id, title, lines[], body, imageData, caption, addedAt }],
+    //     status: 'draft' | 'active' | 'completed',
+    //     currentRound: 0,
+    //     rounds: [ [{ id, e1, e2, v1, v2, winner }] ]
+    //   }
+    // Votes at /votes/{categoryId}/voters/{voterId} tracking match->choice
+
+    const DEFAULT_CAT_STATE = { entries: [], status: 'draft', currentRound: 0, rounds: [], byeEntries: [], resultsPublished: false };
+
+    async function loadAllCategories() {
+      if (usingLocalMode) {
+        const data = readLocal();
+        return CATEGORIES.map(c => Object.assign({ ...c, ...DEFAULT_CAT_STATE }, data.categories[c.id] || {}));
+      }
+      const { collection, getDocs } = window.__firebaseModules;
+      const snap = await getDocs(collection(db, "categories"));
+      const docs = {};
+      snap.forEach(d => { docs[d.id] = d.data(); });
+      return CATEGORIES.map(c => Object.assign({ ...c, ...DEFAULT_CAT_STATE }, docs[c.id] || {}));
+    }
+
+    async function loadCategory(id) {
+      const all = await loadAllCategories();
+      return all.find(c => c.id === id);
+    }
+
+    async function saveCategory(cat) {
+      if (usingLocalMode) {
+        const data = readLocal();
+        data.categories = data.categories || {};
+        data.categories[cat.id] = cat;
+        writeLocal(data);
+        return;
+      }
+      const { doc, setDoc } = window.__firebaseModules;
+      await setDoc(doc(db, "categories", cat.id), cat);
+    }
+
+    function subscribeCategory(id, cb) {
+      if (usingLocalMode) {
+        // Poll localStorage every 1.5s (single-device demo)
+        let last = "";
+        const tick = async () => {
+          const c = await loadCategory(id);
+          const str = JSON.stringify(c);
+          if (str !== last) { last = str; cb(c); }
+        };
+        tick();
+        const timer = setInterval(tick, 1500);
+        return () => clearInterval(timer);
+      }
+      const { doc, onSnapshot } = window.__firebaseModules;
+      return onSnapshot(doc(db, "categories", id), snap => {
+        const base = CATEGORIES.find(c => c.id === id) || {};
+        if (snap.exists()) {
+          cb(Object.assign({ ...base, ...DEFAULT_CAT_STATE }, snap.data()));
+        } else {
+          cb({ ...base, ...DEFAULT_CAT_STATE });
+        }
+      });
+    }
+
+    function subscribeAll(cb) {
+      if (usingLocalMode) {
+        let last = "";
+        const tick = async () => {
+          const cats = await loadAllCategories();
+          const str = JSON.stringify(cats);
+          if (str !== last) { last = str; cb(cats); }
+        };
+        tick();
+        const timer = setInterval(tick, 1500);
+        return () => clearInterval(timer);
+      }
+      const { collection, onSnapshot } = window.__firebaseModules;
+      return onSnapshot(collection(db, "categories"), snap => {
+        const docs = {};
+        snap.forEach(d => { docs[d.id] = d.data(); });
+        cb(CATEGORIES.map(c => Object.assign({ ...c, ...DEFAULT_CAT_STATE }, docs[c.id] || {})));
+      });
+    }
+
+    // Voter fingerprint — one vote per browser per match
+    function getVoterId() {
+      let id = localStorage.getItem("voter-id");
+      if (!id) {
+        id = "v_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+        localStorage.setItem("voter-id", id);
+      }
+      return id;
+    }
+
+    // Record and check votes (also on Firestore for server-side dedup)
+    async function hasVoted(categoryId, matchId) {
+      const key = `voted:${categoryId}:${matchId}`;
+      return !!localStorage.getItem(key);
+    }
+
+    function markVoted(categoryId, matchId, choice) {
+      const key = `voted:${categoryId}:${matchId}`;
+      localStorage.setItem(key, choice);
+    }
+
+    async function castVote(categoryId, matchId, choice) {
+      // choice is 'e1' or 'e2'
+      if (await hasVoted(categoryId, matchId)) {
+        throw new Error("이미 투표하셨습니다.");
+      }
+      const cat = await loadCategory(categoryId);
+      const round = cat.rounds[cat.currentRound];
+      if (!round) throw new Error("경기를 찾을 수 없습니다.");
+      const match = round.find(m => m.id === matchId);
+      if (!match) throw new Error("경기를 찾을 수 없습니다.");
+      if (match.winner) throw new Error("이미 종료된 경기입니다.");
+      if (choice === "e1") match.v1 = (match.v1 || 0) + 1;
+      else match.v2 = (match.v2 || 0) + 1;
+
+      // Auto-advance: if every match in this round has at least 1 vote (or is a bye/decided),
+      // determine winners and generate the next round automatically.
+      const allVoted = round.every(m => m.winner || m.bye || (m.v1 || 0) + (m.v2 || 0) >= 1);
+      if (allVoted) {
+        autoAdvanceRound(cat);
+      }
+
+      await saveCategory(cat);
+      markVoted(categoryId, matchId, choice);
+    }
+
+    function autoAdvanceRound(cat) {
+      // Determine winners of current round, generate next round
+      const round = cat.rounds[cat.currentRound];
+      for (const m of round) {
+        if (m.winner) continue;
+        if (!m.e2) { m.winner = m.e1; continue; }
+        if ((m.v1 || 0) > (m.v2 || 0)) m.winner = m.e1;
+        else if ((m.v2 || 0) > (m.v1 || 0)) m.winner = m.e2;
+        else m.winner = Math.random() < 0.5 ? m.e1 : m.e2; // tie → random
+      }
+      let winners = round.map(m => m.winner);
+      if (cat.currentRound === 0 && cat.byeEntries && cat.byeEntries.length) {
+        winners = winners.concat(cat.byeEntries);
+        cat.byeEntries = [];
+      }
+      if (winners.length === 1) {
+        cat.status = 'completed'; // results still hidden until resultsPublished
+      } else {
+        const nextRound = generateNextRound(winners);
+        cat.rounds.push(nextRound);
+        cat.currentRound = cat.rounds.length - 1;
+      }
+    }
+
+    // ---- TOURNAMENT LOGIC --------------------------------------------
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function generateTournament(entries) {
+      // Random seeding, single elimination. Byes for odd counts at each level.
+      if (entries.length < 2) throw new Error("작품이 2개 이상 있어야 토너먼트를 시작할 수 있습니다.");
+      const shuffled = shuffle(entries);
+      // We only generate round 0; subsequent rounds are generated as winners are determined
+      const rounds = [];
+      const firstRound = [];
+      // Pair them; if odd, last one gets a bye (auto-advance)
+      const byes = [];
+      const n = shuffled.length;
+      // Calculate next power of 2
+      const pow2 = Math.pow(2, Math.ceil(Math.log2(n)));
+      const byeCount = pow2 - n;
+      // First byeCount entries get byes (auto-advance to round 2)
+      const byeEntries = shuffled.slice(0, byeCount).map(e => e.id);
+      const matchEntries = shuffled.slice(byeCount);
+      for (let i = 0; i < matchEntries.length; i += 2) {
+        const e1 = matchEntries[i];
+        const e2 = matchEntries[i+1];
+        firstRound.push({
+          id: "m_" + Math.random().toString(36).slice(2, 9),
+          e1: e1.id,
+          e2: e2 ? e2.id : null,
+          v1: 0,
+          v2: 0,
+          winner: e2 ? null : e1.id,
+          bye: !e2
+        });
+      }
+      rounds.push(firstRound);
+      // Store byes for adding to round 2 later
+      return { rounds, byeEntries };
+    }
+
+    function generateNextRound(winners) {
+      const shuffled = shuffle(winners);
+      const next = [];
+      for (let i = 0; i < shuffled.length; i += 2) {
+        next.push({
+          id: "m_" + Math.random().toString(36).slice(2, 9),
+          e1: shuffled[i],
+          e2: shuffled[i+1] || null,
+          v1: 0,
+          v2: 0,
+          winner: shuffled[i+1] ? null : shuffled[i],
+          bye: !shuffled[i+1]
+        });
+      }
+      return next;
+    }
+
+    function roundName(matches, totalRounds, currentIdx) {
+      const remaining = totalRounds - currentIdx;
+      const matchCount = matches.length;
+      const numEntries = matchCount * 2;
+      if (matchCount === 1) return "결승";
+      if (matchCount === 2) return "준결승";
+      return numEntries + "강";
+    }
+
+    function calcTotalRounds(entryCount) {
+      return Math.ceil(Math.log2(entryCount));
+    }
+
+    // ---- ROUTING -----------------------------------------------------
+    const state = {
+      route: 'home',      // 'home' | 'vote' | 'admin' | 'admin-category'
+      categoryId: null,
+      isAdmin: false,
+      categories: [],
+      category: null,
+      unsubscribe: null,
+    };
+
+    function parseHash() {
+      const h = location.hash.slice(1);
+      if (!h) return { route: 'home' };
+      const parts = h.split("/");
+      if (parts[0] === "vote") return { route: 'vote', categoryId: parts[1] || null };
+      if (parts[0] === "results" && parts[1]) return { route: 'results', categoryId: parts[1] };
+      if (parts[0] === "admin") {
+        if (parts[1]) return { route: 'admin-category', categoryId: parts[1] };
+        return { route: 'admin' };
+      }
+      return { route: 'home' };
+    }
+
+    function navigate(hash) { location.hash = hash; }
+
+    window.addEventListener("hashchange", handleRoute);
+
+    async function handleRoute() {
+      const { route, categoryId } = parseHash();
+      if (state.unsubscribe) { state.unsubscribe(); state.unsubscribe = null; }
+      state.route = route;
+      state.categoryId = categoryId;
+
+      if (route === 'vote') {
+        renderVoterLoading();
+        state.unsubscribe = subscribeAll(cats => {
+          state.categories = cats;
+          renderVoterQueue(categoryId);
+        });
+      } else if (route === 'results') {
+        renderVoterLoading();
+        state.unsubscribe = subscribeCategory(categoryId, cat => {
+          state.category = cat;
+          if (cat.resultsPublished) {
+            renderVoterCompleted(cat);
+          } else {
+            main.innerHTML = `
+              <a class="back-link" id="back-home">◀ 처음으로</a>
+              <div class="state-card mt-24">
+                <span class="emoji">🔒</span>
+                <h3>결과 발표를 준비 중입니다</h3>
+                <p>관리자가 결과를 공개할 때까지 잠시만 기다려주세요.</p>
+              </div>
+            `;
+            document.getElementById("back-home").onclick = () => navigate('');
+          }
+        });
+      } else if (route === 'admin') {
+        if (!state.isAdmin) {
+          openModal("admin-login-modal");
+          navigate('');
+          return;
+        }
+        renderHome(); // show admin dashboard via renderHome admin mode
+        state.unsubscribe = subscribeAll(cats => {
+          state.categories = cats;
+          renderAdminDashboard();
+        });
+      } else if (route === 'admin-category') {
+        if (!state.isAdmin) { openModal("admin-login-modal"); navigate(''); return; }
+        renderAdminCategoryLoading();
+        state.unsubscribe = subscribeCategory(categoryId, cat => {
+          state.category = cat;
+          renderAdminCategory();
+        });
+      } else {
+        // home
+        renderHomeLoading();
+        state.unsubscribe = subscribeAll(cats => {
+          state.categories = cats;
+          renderHome();
+        });
+      }
+    }
+
+    // ---- RENDERERS ---------------------------------------------------
+    const main = document.getElementById("main");
+
+    function renderHomeLoading() {
+      main.innerHTML = `<div class="loading"><div class="spinner"></div></div>`;
+    }
+    function renderVoterLoading() {
+      main.innerHTML = `<div class="loading"><div class="spinner"></div></div>`;
+    }
+    function renderAdminCategoryLoading() {
+      main.innerHTML = `<div class="loading"><div class="spinner"></div></div>`;
+    }
+
+    function renderHome() {
+      const cats = state.categories;
+      const configNotice = !FIREBASE_CONFIGURED ? `
+        <div class="config-alert">
+          <h4>⚠️ 데모(로컬) 모드로 실행 중</h4>
+          <p>
+            현재 Firebase가 설정되지 않아 <strong>이 브라우저에만 저장되는 데모 모드</strong>로 동작합니다.
+            여러 사용자가 링크로 접속해 투표하려면 <code>index.html</code> 파일 상단 <code>firebaseConfig</code> 항목에
+            Firebase 콘솔의 프로젝트 설정값을 입력해주세요. 자세한 방법은 함께 제공된 <code>README.md</code> 를 참고하세요.
+          </p>
+        </div>
+      ` : '';
+
+      const activeCount = cats.filter(c => c.status === 'active').length;
+      const publishedCount = cats.filter(c => c.resultsPublished).length;
+      const hasActive = activeCount > 0;
+      const hasPublished = publishedCount > 0;
+
+      main.innerHTML = `
+        <section class="hero">
+          <div class="hero-eyebrow">서구노인종합복지관</div>
+          <h2>제54회 어버이날 기념<br/>작품공모전 블라인드 투표</h2>
+          <p>
+            감사와 사랑의 마음이 담긴 작품들을 만나보세요.<br/>
+            아래 버튼 하나로 모든 공모 분야의 투표에 순서대로 참여하실 수 있습니다.
+          </p>
+          ${hasActive ? `
+            <div style="margin-top:28px;">
+              <button class="btn btn-primary btn-lg" id="start-voting-btn" style="padding:16px 36px; font-size:17px; border-radius:100px;">🗳️ 투표 시작하기</button>
+            </div>
+            <div style="margin-top:12px; font-size:13px; color: var(--color-text-light);">
+              모든 공모 분야의 경기를 차례로 보여드립니다.
+            </div>
+          ` : `
+            <div style="margin-top:20px; padding:14px 20px; background: var(--color-bg-card); border-radius:100px; display:inline-block; color: var(--color-text-muted); font-size:14px;">
+              ⏳ 아직 투표가 시작되지 않았습니다
+            </div>
+          `}
+        </section>
+
+        ${configNotice}
+
+        ${hasPublished ? `
+          <div class="section-title">🏆 결과 발표</div>
+          <div class="category-grid" style="margin-bottom:32px;">
+            ${cats.filter(c => c.resultsPublished).map(renderCategoryCard).join("")}
+          </div>
+        ` : ''}
+
+        <div class="section-title">공모 분야 현황</div>
+        <div class="category-grid" id="category-grid">
+          ${cats.filter(c => !c.resultsPublished).map(renderCategoryCard).join("")}
+        </div>
+
+        <div class="mt-24" style="text-align:center; color: var(--color-text-light); font-size:13px;">
+          링크를 공유하면 여러 분들이 함께 투표에 참여할 수 있습니다.
+        </div>
+      `;
+
+      const startBtn = document.getElementById("start-voting-btn");
+      if (startBtn) startBtn.onclick = () => navigate('vote');
+
+      // Click handler for category cards
+      document.querySelectorAll("[data-go-vote]").forEach(el => {
+        el.addEventListener("click", () => {
+          const id = el.dataset.goVote;
+          const c = state.categories.find(x => x.id === id);
+          if (!c) return;
+          // If results published for this cat, show them
+          if (c.resultsPublished) {
+            navigate(`results/${id}`);
+            return;
+          }
+          // Otherwise go to queue mode filtered by this category
+          if (c.status !== 'active') {
+            toast("아직 투표가 시작되지 않은 분야입니다.", "warning");
+            return;
+          }
+          navigate(`vote/${id}`);
+        });
+      });
+    }
+
+    function renderCategoryCard(c) {
+      const entryCount = (c.entries || []).length;
+      let statusText = "투표 대기 중";
+      let badgeClass = "badge-draft";
+      let disabled = c.status !== 'active' && !c.resultsPublished;
+      if (c.status === 'active') { statusText = "투표 진행 중"; badgeClass = "badge-active"; }
+      else if (c.resultsPublished) { statusText = "결과 공개"; badgeClass = "badge-completed"; }
+      else if (c.status === 'completed') { statusText = "결과 발표 대기"; badgeClass = "badge-completed"; disabled = true; }
+
+      let roundInfo = "-";
+      if (c.status === 'active' && c.rounds?.length) {
+        const round = c.rounds[c.currentRound];
+        if (round) {
+          const total = calcTotalRounds(entryCount);
+          roundInfo = roundName(round, total, c.currentRound);
+        }
+      } else if (c.resultsPublished) {
+        roundInfo = "🏆";
+      } else if (c.status === 'completed') {
+        roundInfo = "대기 중";
+      }
+
+      return `
+        <div class="category-card ${disabled ? 'disabled' : ''}" data-go-vote="${c.id}">
+          <div class="category-card-top">
+            <div class="category-icon">${c.icon}</div>
+            <span class="category-badge ${badgeClass}">${statusText}</span>
+          </div>
+          <h3>${c.name}</h3>
+          <div class="sub">${c.source}</div>
+          <div class="category-stats">
+            <div class="stat">
+              <span class="stat-value">${entryCount}</span>
+              <span class="stat-label">등록 작품</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">${roundInfo}</span>
+              <span class="stat-label">현재 상태</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---- VOTER VIEW (unified queue across all categories) ------------
+    async function renderVoterQueue(filterCatId = null) {
+      const cats = state.categories.filter(c => {
+        if (filterCatId) return c.id === filterCatId;
+        return true;
+      });
+
+      // Only active tournaments are votable
+      const activeCats = cats.filter(c => c.status === 'active');
+
+      if (activeCats.length === 0) {
+        // No active tournaments
+        const anyDraft = cats.some(c => c.status === 'draft');
+        main.innerHTML = `
+          <a class="back-link" id="back-home">◀ 처음으로</a>
+          <div class="state-card mt-24">
+            <span class="emoji">⏳</span>
+            <h3>아직 투표가 시작되지 않았습니다</h3>
+            <p>${anyDraft ? '관리자가 토너먼트를 시작하면 이곳에서 투표하실 수 있습니다.' : '진행 중인 투표가 없습니다.'}</p>
+            <button class="btn btn-secondary" id="home-btn">처음으로</button>
+          </div>
+        `;
+        document.getElementById("back-home").onclick = () => navigate('');
+        document.getElementById("home-btn").onclick = () => navigate('');
+        return;
+      }
+
+      // Gather votable matches across all active categories
+      const queueItems = [];       // { cat, match, entries(map) }
+      let totalQueue = 0;
+      let votedQueue = 0;
+      for (const cat of activeCats) {
+        const round = cat.rounds[cat.currentRound] || [];
+        const entries = new Map((cat.entries || []).map(e => [e.id, e]));
+        for (const m of round) {
+          if (m.bye || m.winner) continue;
+          if (!m.e2) continue;
+          totalQueue++;
+          const voted = await hasVoted(cat.id, m.id);
+          if (voted) { votedQueue++; continue; }
+          queueItems.push({ cat, match: m, entries });
+        }
+      }
+
+      if (queueItems.length === 0) {
+        main.innerHTML = `
+          <a class="back-link" id="back-home">◀ 처음으로</a>
+          <div class="state-card mt-24">
+            <span class="emoji">🙏</span>
+            <h3>현재 라운드의 투표를 모두 완료했습니다</h3>
+            <p>
+              소중한 참여에 감사드립니다.<br/>
+              다음 라운드가 시작되면 새로운 경기가 추가됩니다.<br/>
+              잠시 후 다시 방문하거나 창을 열어두시면 자동으로 갱신됩니다.
+            </p>
+            <button class="btn btn-secondary" id="home-btn">처음으로</button>
+          </div>
+        `;
+        document.getElementById("back-home").onclick = () => navigate('');
+        document.getElementById("home-btn").onclick = () => navigate('');
+        return;
+      }
+
+      // Show the first unvoted match
+      const { cat, match, entries } = queueItems[0];
+      const e1 = entries.get(match.e1);
+      const e2 = entries.get(match.e2);
+      const round = cat.rounds[cat.currentRound];
+      const total = calcTotalRounds((cat.entries || []).length);
+      const rName = roundName(round, total, cat.currentRound);
+      const pct = totalQueue === 0 ? 100 : Math.round((votedQueue / totalQueue) * 100);
+
+      main.innerHTML = `
+        <a class="back-link" id="back-home">◀ 처음으로</a>
+        <div class="vote-header mt-24">
+          <div>
+            <div style="font-size:13px; color: var(--color-text-light); margin-bottom:4px;">
+              ${cat.icon} ${cat.name} · ${cat.source}
+            </div>
+            <div class="round-pill">🏆 ${rName}</div>
+          </div>
+          <div style="font-size:13px; color: var(--color-text-muted); font-weight:500; text-align:right;">
+            전체 ${totalQueue}경기 중 ${votedQueue}경기 완료<br/>
+            <span style="color:var(--color-text-light); font-size:12px;">남은 경기 ${queueItems.length}개</span>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-text">
+            <span>투표 진행률</span>
+            <span>${pct}%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        </div>
+
+        <div class="match-wrap">
+          ${renderEntryCard(e1, cat.type, 'A')}
+          <div class="vs-divider"><div class="vs-circle">VS</div></div>
+          ${renderEntryCard(e2, cat.type, 'B')}
+        </div>
+
+        <div class="vote-action">
+          <button class="btn btn-primary btn-lg" id="vote-e1">🗳️ A작품에 투표</button>
+          <button class="btn btn-accent btn-lg" id="vote-e2">🗳️ B작품에 투표</button>
+        </div>
+        <div class="text-center text-muted mt-16" style="font-size:13px;">
+          블라인드 투표입니다. 신중하게 선택해주세요. 한 경기에 한 번만 투표할 수 있습니다.<br/>
+          투표 후 다음 경기로 자동 이동합니다.
+        </div>
+      `;
+
+      document.getElementById("back-home").onclick = () => navigate('');
+      document.getElementById("vote-e1").onclick = () => handleVoteQueue(cat.id, match.id, 'e1', filterCatId);
+      document.getElementById("vote-e2").onclick = () => handleVoteQueue(cat.id, match.id, 'e2', filterCatId);
+    }
+
+    async function handleVoteQueue(categoryId, matchId, choice, filterCatId) {
+      const btn1 = document.getElementById("vote-e1");
+      const btn2 = document.getElementById("vote-e2");
+      if (btn1) btn1.disabled = true;
+      if (btn2) btn2.disabled = true;
+      try {
+        await castVote(categoryId, matchId, choice);
+        toast("투표가 완료되었습니다. 감사합니다!", "success");
+        // Re-render queue (subscription will also trigger, but this ensures immediate update)
+        setTimeout(() => renderVoterQueue(filterCatId), 100);
+      } catch (e) {
+        toast(e.message || "투표 중 오류가 발생했습니다.", "error");
+        if (btn1) btn1.disabled = false;
+        if (btn2) btn2.disabled = false;
+      }
+    }
+
+    function renderEntryCard(entry, type, label) {
+      if (!entry) return `<div class="entry-card"><div class="entry-label">— 부전승 —</div></div>`;
+      if (type === 'poem') {
+        const lines = entry.lines || ['','','',''];
+        return `
+          <div class="entry-card" data-entry-id="${entry.id}">
+            <span class="entry-label">작품 ${label}</span>
+            <div class="entry-poem">
+              ${lines.map((t,i) => `
+                <div class="line">
+                  <span class="char">${POEM_CHARS[i]}</span>
+                  <span class="text">${escapeHtml(t || '')}</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+      if (type === 'letter') {
+        return `
+          <div class="entry-card" data-entry-id="${entry.id}">
+            <span class="entry-label">작품 ${label}</span>
+            ${entry.title ? `<div class="entry-letter-title">${escapeHtml(entry.title)}</div>` : ''}
+            <div class="entry-letter-body">${escapeHtml(entry.body || '')}</div>
+          </div>
+        `;
+      }
+      // photo
+      return `
+        <div class="entry-card" data-entry-id="${entry.id}">
+          <span class="entry-label">작품 ${label}</span>
+          ${entry.imageData ? `<img class="entry-photo" src="${entry.imageData}" alt="photo" />` : `<div class="entry-photo" style="display:grid;place-items:center;color:var(--color-text-light);">이미지 없음</div>`}
+          <div class="entry-photo-caption">${escapeHtml(entry.caption || '')}</div>
+        </div>
+      `;
+    }
+
+    function renderVoterCompleted(c) {
+      // Compute ranking: winner is last round's winner. For simplicity show winner + bracket summary
+      const entries = new Map(c.entries.map(e => [e.id, e]));
+      const finalRound = c.rounds[c.rounds.length - 1];
+      const finalMatch = finalRound?.[0];
+      const winnerId = finalMatch?.winner;
+      const runnerUpId = finalMatch ? (winnerId === finalMatch.e1 ? finalMatch.e2 : finalMatch.e1) : null;
+
+      // Semi-finalists: losers of round before final
+      const semiRound = c.rounds[c.rounds.length - 2];
+      const thirdPlaces = [];
+      if (semiRound) {
+        for (const m of semiRound) {
+          if (m.winner && m.e1 && m.e2) {
+            const loserId = m.winner === m.e1 ? m.e2 : m.e1;
+            thirdPlaces.push(loserId);
+          }
+        }
+      }
+
+      main.innerHTML = `
+        <a class="back-link" id="back-home">◀ 처음으로</a>
+        <div class="vote-header mt-24">
+          <div>
+            <div style="font-size:13px; color: var(--color-text-light); margin-bottom:4px;">${c.name} · ${c.source}</div>
+            <div class="round-pill">🎉 투표 종료</div>
+          </div>
+        </div>
+
+        <div class="state-card" style="padding:40px 32px;">
+          <span class="emoji">🏆</span>
+          <h3>최종 결과 발표</h3>
+          <p>여러분의 소중한 투표로 선정된 작품들입니다.</p>
+        </div>
+
+        <div class="finalists">
+          ${winnerId ? renderFinalistRow(1, entries.get(winnerId), c.type) : ''}
+          ${runnerUpId ? renderFinalistRow(2, entries.get(runnerUpId), c.type) : ''}
+          ${thirdPlaces.map(id => renderFinalistRow(3, entries.get(id), c.type)).join("")}
+        </div>
+      `;
+      document.getElementById("back-home").onclick = () => navigate('');
+    }
+
+    function renderFinalistRow(rank, entry, type) {
+      if (!entry) return '';
+      const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+      const rankText = rank === 1 ? '우승' : rank === 2 ? '준우승' : '3위';
+      let summary = '';
+      if (type === 'poem') summary = (entry.lines || []).filter(Boolean).join(' / ');
+      else if (type === 'letter') summary = (entry.title || (entry.body || '').slice(0, 40));
+      else summary = entry.caption || '';
+      return `
+        <div class="finalist-row">
+          <div class="finalist-rank ${rankClass}">${rankText}</div>
+          <div style="min-width:0;">
+            <div style="font-weight:600; color:var(--color-text); margin-bottom:4px;">${escapeHtml((type === 'letter' ? (entry.title || '편지') : (type === 'poem' ? '어버이날 4행시' : '사진 작품')))}</div>
+            <div style="font-size:13px; color: var(--color-text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(summary)}</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" data-preview-entry="${entry.id}" data-preview-cat="${state.category.id}">자세히 보기</button>
+        </div>
+      `;
+    }
+
+    // ---- ADMIN -------------------------------------------------------
+    function renderAdminDashboard() {
+      const cats = state.categories;
+      const configNotice = !FIREBASE_CONFIGURED ? `
+        <div class="config-alert">
+          <h4>⚠️ 데모(로컬) 모드 안내</h4>
+          <p>
+            Firebase 설정이 없어 이 브라우저에만 저장됩니다.
+            여러 사용자가 링크로 접속해 투표하려면 <code>README.md</code> 안내에 따라 Firebase 설정을 먼저 완료하세요.
+          </p>
+        </div>
+      ` : '';
+
+      const anyActive = cats.some(c => c.status === 'active' || (c.status === 'completed' && !c.resultsPublished));
+      main.innerHTML = `
+        <div class="flex-between mb-16" style="margin-bottom:24px;">
+          <h2 style="font-size:22px; font-weight:700; letter-spacing:-0.5px;">관리자 대시보드</h2>
+          <div class="flex-gap">
+            ${anyActive ? `<button class="btn btn-accent" id="publish-all-btn">🏁 전체 결과 공개</button>` : ''}
+            <button class="btn btn-secondary btn-sm" id="view-site-btn">사이트 보기</button>
+            <button class="btn btn-secondary btn-sm" id="logout-btn">로그아웃</button>
+          </div>
+        </div>
+
+        <div class="bracket-info" style="margin-bottom:20px;">
+          <div>💡 <strong>사용 방법</strong>: 각 분야에 작품을 등록하고 "토너먼트 시작"을 누르면, 링크 접속자들이 모든 분야의 경기를 한 번에 투표할 수 있습니다. 각 경기에 첫 투표가 모이면 <strong>다음 라운드로 자동 진행</strong>됩니다. 행사 마감 후 "전체 결과 공개" 버튼을 누르면 결과가 일괄 공개됩니다.</div>
+        </div>
+
+        ${configNotice}
+
+        <div class="section-title">공모 분야 관리</div>
+        <div class="category-grid">
+          ${cats.map(c => {
+            const entryCount = (c.entries || []).length;
+            let statusText = "미시작";
+            let badgeClass = "badge-draft";
+            if (c.status === 'active') { statusText = "투표 진행 중"; badgeClass = "badge-active"; }
+            else if (c.status === 'completed' && !c.resultsPublished) { statusText = "결과 대기"; badgeClass = "badge-completed"; }
+            else if (c.status === 'completed' && c.resultsPublished) { statusText = "결과 공개됨"; badgeClass = "badge-completed"; }
+            return `
+              <div class="category-card" style="cursor:pointer;" data-admin-cat="${c.id}">
+                <div class="category-card-top">
+                  <div class="category-icon">${c.icon}</div>
+                  <span class="category-badge ${badgeClass}">${statusText}</span>
+                </div>
+                <h3>${c.name}</h3>
+                <div class="sub">${c.source}</div>
+                <div class="category-stats">
+                  <div class="stat">
+                    <span class="stat-value">${entryCount}</span>
+                    <span class="stat-label">작품</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-value">${(c.rounds || []).length}</span>
+                    <span class="stat-label">라운드</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+
+      document.getElementById("logout-btn").onclick = () => {
+        state.isAdmin = false;
+        navigate('');
+      };
+      document.getElementById("view-site-btn").onclick = () => navigate('');
+      const pubAllBtn = document.getElementById("publish-all-btn");
+      if (pubAllBtn) pubAllBtn.onclick = handlePublishAll;
+      document.querySelectorAll("[data-admin-cat]").forEach(el => {
+        el.onclick = () => navigate(`admin/${el.dataset.adminCat}`);
+      });
+    }
+
+    function renderAdminCategory() {
+      const c = state.category;
+      if (!c) return;
+      const entries = c.entries || [];
+      const total = calcTotalRounds(entries.length || 1);
+
+      const statusBlock = (() => {
+        if (c.status === 'active') {
+          const round = c.rounds[c.currentRound];
+          return `
+            <div class="bracket-info">
+              <div>상태: <strong>진행 중</strong></div>
+              <div>현재 라운드: <strong>${roundName(round, total, c.currentRound)}</strong> (${c.currentRound + 1}/${total})</div>
+              <div>이번 라운드 경기: <strong>${(round || []).length}개</strong></div>
+            </div>
+          `;
+        }
+        if (c.status === 'completed') {
+          return `<div class="bracket-info"><div>상태: <strong>토너먼트 종료</strong></div><div>총 ${entries.length}개 작품 · ${c.rounds.length}라운드 진행</div></div>`;
+        }
+        return `<div class="bracket-info"><div>상태: <strong>준비 중</strong></div><div>작품을 등록한 후 토너먼트를 시작하세요.</div></div>`;
+      })();
+
+      main.innerHTML = `
+        <div class="flex-between mb-16" style="margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <a class="back-link" id="back-admin">◀ 대시보드</a>
+            <h2 style="font-size:22px; font-weight:700; margin-top:8px;">${c.name} · ${c.source}</h2>
+          </div>
+          <div class="flex-gap">
+            ${c.status === 'draft' ? `<button class="btn btn-primary" id="start-tournament">▶ 토너먼트 시작</button>` : ''}
+            ${(c.status === 'active' || c.status === 'completed') && !c.resultsPublished ? `<button class="btn btn-accent" id="publish-results">🏁 결과 공개</button>` : ''}
+            ${c.resultsPublished ? `<button class="btn btn-secondary" id="unpublish-results">결과 비공개 전환</button>` : ''}
+            ${c.status !== 'draft' ? `<button class="btn btn-secondary" id="reset-tournament">토너먼트 초기화</button>` : ''}
+          </div>
+        </div>
+
+        ${statusBlock}
+
+        <div class="admin-section">
+          <div class="admin-section-head">
+            <h4>작품 목록</h4>
+            <div class="flex-gap">
+              <span class="counter">총 ${entries.length}개</span>
+              <button class="btn btn-primary btn-sm" id="add-entry-btn">＋ 작품 등록</button>
+            </div>
+          </div>
+          ${entries.length === 0 ? `
+            <div class="text-center text-muted" style="padding:40px 0;">
+              아직 등록된 작품이 없습니다. <br/>
+              <span style="font-size:13px;">※ 토너먼트를 시작하려면 최소 2개의 작품이 필요합니다.</span>
+            </div>
+          ` : `
+            <div class="entry-list">
+              ${entries.map((e, idx) => renderAdminEntryItem(e, idx, c.type)).join("")}
+            </div>
+          `}
+        </div>
+
+        ${c.rounds && c.rounds.length ? `
+          <div class="admin-section">
+            <div class="admin-section-head">
+              <h4>토너먼트 대진표</h4>
+            </div>
+            <div class="rounds-list">
+              ${c.rounds.map((round, idx) => renderAdminRoundBlock(round, idx, c, total)).join("")}
+            </div>
+          </div>
+        ` : ''}
+      `;
+
+      document.getElementById("back-admin").onclick = () => navigate('admin');
+      document.getElementById("add-entry-btn").onclick = () => openAddEntryModal(c);
+      const startBtn = document.getElementById("start-tournament");
+      if (startBtn) startBtn.onclick = () => handleStartTournament(c);
+      const publishBtn = document.getElementById("publish-results");
+      if (publishBtn) publishBtn.onclick = () => handlePublishResults(c);
+      const unpublishBtn = document.getElementById("unpublish-results");
+      if (unpublishBtn) unpublishBtn.onclick = () => handleUnpublishResults(c);
+      const resetBtn = document.getElementById("reset-tournament");
+      if (resetBtn) resetBtn.onclick = () => handleResetTournament(c);
+      document.querySelectorAll("[data-del-entry]").forEach(el => el.onclick = () => handleDeleteEntry(c, el.dataset.delEntry));
+      document.querySelectorAll("[data-prv-entry]").forEach(el => el.onclick = () => previewEntry(c, el.dataset.prvEntry));
+      document.querySelectorAll("[data-edit-entry]").forEach(el => el.onclick = () => openEditEntryModal(c, el.dataset.editEntry));
+    }
+
+    function renderAdminEntryItem(e, idx, type) {
+      let thumb = "";
+      let title = "";
+      let preview = "";
+      if (type === 'poem') {
+        title = "어버이날 4행시 #" + (idx+1);
+        preview = (e.lines || []).filter(Boolean).join(" / ");
+        thumb = `<div class="entry-thumb" style="display:grid;place-items:center;font-weight:700;color:var(--color-primary);">詩</div>`;
+      } else if (type === 'letter') {
+        title = e.title || ("편지 #" + (idx+1));
+        preview = (e.body || '').slice(0, 80);
+        thumb = `<div class="entry-thumb" style="display:grid;place-items:center;font-weight:700;color:var(--color-accent-dark);">✉</div>`;
+      } else {
+        title = "사진 #" + (idx+1);
+        preview = e.caption || '';
+        thumb = e.imageData ? `<img class="entry-thumb" src="${e.imageData}" />` : `<div class="entry-thumb"></div>`;
+      }
+      return `
+        <div class="entry-item">
+          ${thumb}
+          <div class="entry-item-text">
+            <div class="ttl">${escapeHtml(title)}</div>
+            <div class="prv">${escapeHtml(preview)}</div>
+          </div>
+          <div class="entry-item-actions">
+            <button class="btn btn-secondary btn-sm" data-prv-entry="${e.id}">보기</button>
+            <button class="btn btn-secondary btn-sm" data-edit-entry="${e.id}">편집</button>
+            <button class="btn btn-danger btn-sm" data-del-entry="${e.id}">삭제</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminRoundBlock(round, idx, cat, total) {
+      const entries = new Map(cat.entries.map(e => [e.id, e]));
+      const isCurrent = cat.status === 'active' && idx === cat.currentRound;
+      const allDecided = round.every(m => m.winner);
+      const stateClass = idx < cat.currentRound ? 'done' : (isCurrent ? 'active' : '');
+      const name = roundName(round, total, idx);
+      return `
+        <div>
+          <div class="round-card ${stateClass}">
+            <div class="round-info-block">
+              <span class="name">${name} <span style="color:var(--color-text-light);font-weight:normal;font-size:12px;">(${idx+1}/${total})</span></span>
+              <span class="meta">${round.length}개 경기 · ${allDecided ? '완료' : (isCurrent ? '진행 중' : '대기')}</span>
+            </div>
+          </div>
+          <div class="match-list">
+            ${round.map((m, mIdx) => {
+              const e1 = m.e1 ? entries.get(m.e1) : null;
+              const e2 = m.e2 ? entries.get(m.e2) : null;
+              const n1 = entryLabel(e1, cat.type);
+              const n2 = e2 ? entryLabel(e2, cat.type) : '(부전승)';
+              const w1 = m.winner === m.e1;
+              const w2 = m.winner === m.e2;
+              return `
+                <div class="match-row">
+                  <div class="m-no">#${mIdx+1}</div>
+                  <div class="match-side ${w1 ? 'winner' : ''}">
+                    <span class="name">${escapeHtml(n1)}</span>
+                    <span class="vote-count">${m.v1 || 0}표</span>
+                  </div>
+                  <div class="vs">VS</div>
+                  <div class="match-side ${w2 ? 'winner' : ''}">
+                    <span class="name">${escapeHtml(n2)}</span>
+                    ${e2 ? `<span class="vote-count">${m.v2 || 0}표</span>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function entryLabel(entry, type) {
+      if (!entry) return '(부전승)';
+      if (type === 'poem') {
+        return (entry.lines || []).filter(Boolean).join(' / ').slice(0, 40) || '어버이날 4행시';
+      }
+      if (type === 'letter') {
+        return entry.title || (entry.body || '').slice(0, 30);
+      }
+      return entry.caption || '사진';
+    }
+
+    // ---- ADD ENTRY MODAL ---------------------------------------------
+    let addEntryContext = null;
+
+    function openAddEntryModal(cat) {
+      addEntryContext = { catId: cat.id };
+      const body = document.getElementById("add-entry-body");
+      document.getElementById("add-entry-title").textContent =
+        `${cat.name} (${cat.source}) — 작품 등록`;
+
+      if (cat.type === 'poem') {
+        body.innerHTML = `
+          <p class="text-muted" style="font-size:13px; margin-bottom:16px;">
+            "어·버·이·날" 각 글자로 시작하는 4행시를 입력해주세요.
+          </p>
+          <div class="poem-grid">
+            ${POEM_CHARS.map((ch, i) => `
+              <div class="poem-char-label">${ch}</div>
+              <input type="text" class="form-input" id="poem-line-${i}" placeholder="${ch}로 시작하는 한 줄" />
+            `).join("")}
+          </div>
+          <div class="form-group mt-16">
+            <label class="form-label">작성자 (선택, 비공개)</label>
+            <input type="text" class="form-input" id="entry-author" placeholder="예: 김○○ 어르신" />
+            <div class="form-hint">블라인드 투표에서는 표시되지 않습니다.</div>
+          </div>
+        `;
+      } else if (cat.type === 'letter') {
+        body.innerHTML = `
+          <div class="form-group">
+            <label class="form-label">제목 (선택)</label>
+            <input type="text" class="form-input" id="letter-title" placeholder="예: 어머니께" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">편지 내용 *</label>
+            <textarea class="form-textarea" id="letter-body" rows="10" placeholder="편지 내용을 입력하세요."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">작성자 (선택, 비공개)</label>
+            <input type="text" class="form-input" id="entry-author" placeholder="예: 김○○ 어르신" />
+            <div class="form-hint">블라인드 투표에서는 표시되지 않습니다.</div>
+          </div>
+        `;
+      } else {
+        body.innerHTML = `
+          <div class="form-group">
+            <label class="form-label">사진 업로드 *</label>
+            <input type="file" class="form-input" id="photo-file" accept="image/*" />
+            <div class="form-hint">JPG, PNG 등 이미지 파일. 최대 5MB 권장. 큰 이미지는 자동으로 축소됩니다.</div>
+            <div id="photo-preview" class="mt-16"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">작품 설명 *</label>
+            <textarea class="form-textarea" id="photo-caption" rows="4" placeholder="작품을 설명하는 글을 입력하세요."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">작성자 (선택, 비공개)</label>
+            <input type="text" class="form-input" id="entry-author" placeholder="예: 김○○ 어르신" />
+            <div class="form-hint">블라인드 투표에서는 표시되지 않습니다.</div>
+          </div>
+        `;
+        // attach preview
+        document.getElementById("photo-file").onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const data = await resizeImage(file, 1600, 0.85);
+          addEntryContext.imageData = data;
+          document.getElementById("photo-preview").innerHTML = `<img src="${data}" style="max-width:240px; border-radius:8px; border:1px solid var(--color-border);" />`;
+        };
+      }
+
+      openModal("add-entry-modal");
+    }
+
+    async function handleAddEntrySubmit() {
+      if (!addEntryContext) return;
+      const cat = await loadCategory(addEntryContext.catId);
+      const author = (document.getElementById("entry-author")?.value || '').trim();
+
+      // ---- EDIT MODE ----
+      if (addEntryContext.editId) {
+        const entry = (cat.entries || []).find(e => e.id === addEntryContext.editId);
+        if (!entry) { toast("작품을 찾을 수 없습니다.", "error"); return; }
+        if (cat.type === 'poem') {
+          const lines = POEM_CHARS.map((_, i) => (document.getElementById(`poem-line-${i}`).value || '').trim());
+          if (!lines.some(Boolean)) { toast("4행시 내용을 입력해주세요.", "warning"); return; }
+          entry.lines = lines;
+        } else if (cat.type === 'letter') {
+          const body = (document.getElementById("letter-body").value || '').trim();
+          if (!body) { toast("편지 내용을 입력해주세요.", "warning"); return; }
+          entry.title = (document.getElementById("letter-title").value || '').trim();
+          entry.body = body;
+        } else {
+          const caption = (document.getElementById("photo-caption").value || '').trim();
+          if (!caption) { toast("작품 설명을 입력해주세요.", "warning"); return; }
+          entry.caption = caption;
+          if (addEntryContext.imageData) entry.imageData = addEntryContext.imageData;
+        }
+        entry.author = author;
+        await saveCategory(cat);
+        toast("작품이 수정되었습니다.", "success");
+        closeModal("add-entry-modal");
+        addEntryContext = null;
+        return;
+      }
+
+      // ---- ADD MODE ----
+      // Allow adding even when tournament is active, but reset the tournament if needed
+      if (cat.status === 'active' || cat.status === 'completed') {
+        const ok = await confirmDialog(
+          "토너먼트 재시작 필요",
+          "작품을 추가하면 현재 분야의 토너먼트가 초기화되고 지금까지의 투표가 사라집니다.\n\n새 작품을 포함해 토너먼트를 다시 시작해야 합니다. 계속하시겠습니까?"
+        );
+        if (!ok) return;
+      }
+
+      let newEntry = null;
+      if (cat.type === 'poem') {
+        const lines = POEM_CHARS.map((_, i) => (document.getElementById(`poem-line-${i}`).value || '').trim());
+        if (!lines.some(Boolean)) { toast("4행시 내용을 입력해주세요.", "warning"); return; }
+        newEntry = { id: genId(), lines, author, addedAt: Date.now() };
+      } else if (cat.type === 'letter') {
+        const title = (document.getElementById("letter-title").value || '').trim();
+        const body = (document.getElementById("letter-body").value || '').trim();
+        if (!body) { toast("편지 내용을 입력해주세요.", "warning"); return; }
+        newEntry = { id: genId(), title, body, author, addedAt: Date.now() };
+      } else {
+        const caption = (document.getElementById("photo-caption").value || '').trim();
+        if (!addEntryContext.imageData) { toast("사진을 업로드해주세요.", "warning"); return; }
+        if (!caption) { toast("작품 설명을 입력해주세요.", "warning"); return; }
+        newEntry = { id: genId(), imageData: addEntryContext.imageData, caption, author, addedAt: Date.now() };
+      }
+
+      cat.entries = cat.entries || [];
+      cat.entries.push(newEntry);
+      if (cat.status === 'active' || cat.status === 'completed') {
+        cat.rounds = [];
+        cat.currentRound = 0;
+        cat.byeEntries = [];
+        cat.status = 'draft';
+        cat.resultsPublished = false;
+      }
+      await saveCategory(cat);
+      toast("작품이 등록되었습니다.", "success");
+      closeModal("add-entry-modal");
+      addEntryContext = null;
+    }
+
+    function openEditEntryModal(cat, entryId) {
+      const entry = (cat.entries || []).find(e => e.id === entryId);
+      if (!entry) return;
+      addEntryContext = { catId: cat.id, editId: entryId };
+      document.getElementById("add-entry-title").textContent = `${cat.name} (${cat.source}) — 작품 수정`;
+      const body = document.getElementById("add-entry-body");
+      const authorVal = escapeAttr(entry.author || '');
+      if (cat.type === 'poem') {
+        body.innerHTML = `
+          <p class="text-muted" style="font-size:13px; margin-bottom:16px;">
+            "어·버·이·날" 각 글자로 시작하는 4행시를 수정해주세요.
+          </p>
+          <div class="poem-grid">
+            ${POEM_CHARS.map((ch, i) => `
+              <div class="poem-char-label">${ch}</div>
+              <input type="text" class="form-input" id="poem-line-${i}" placeholder="${ch}로 시작하는 한 줄" value="${escapeAttr(entry.lines?.[i] || '')}" />
+            `).join("")}
+          </div>
+          <div class="form-group mt-16">
+            <label class="form-label">작성자 (선택, 비공개)</label>
+            <input type="text" class="form-input" id="entry-author" value="${authorVal}" />
+            <div class="form-hint">블라인드 투표에서는 표시되지 않습니다.</div>
+          </div>
+        `;
+      } else if (cat.type === 'letter') {
+        body.innerHTML = `
+          <div class="form-group">
+            <label class="form-label">제목 (선택)</label>
+            <input type="text" class="form-input" id="letter-title" value="${escapeAttr(entry.title || '')}" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">편지 내용 *</label>
+            <textarea class="form-textarea" id="letter-body" rows="10">${escapeHtml(entry.body || '')}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">작성자 (선택, 비공개)</label>
+            <input type="text" class="form-input" id="entry-author" value="${authorVal}" />
+            <div class="form-hint">블라인드 투표에서는 표시되지 않습니다.</div>
+          </div>
+        `;
+      } else {
+        body.innerHTML = `
+          <div class="form-group">
+            <label class="form-label">사진 (변경 시에만 다시 업로드)</label>
+            <input type="file" class="form-input" id="photo-file" accept="image/*" />
+            <div class="form-hint">기존 사진을 유지하려면 업로드하지 마세요.</div>
+            <div id="photo-preview" class="mt-16">${entry.imageData ? `<img src="${entry.imageData}" style="max-width:240px; border-radius:8px; border:1px solid var(--color-border);" />` : ''}</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">작품 설명 *</label>
+            <textarea class="form-textarea" id="photo-caption" rows="4">${escapeHtml(entry.caption || '')}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">작성자 (선택, 비공개)</label>
+            <input type="text" class="form-input" id="entry-author" value="${authorVal}" />
+            <div class="form-hint">블라인드 투표에서는 표시되지 않습니다.</div>
+          </div>
+        `;
+        document.getElementById("photo-file").onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const data = await resizeImage(file, 1600, 0.85);
+          addEntryContext.imageData = data;
+          document.getElementById("photo-preview").innerHTML = `<img src="${data}" style="max-width:240px; border-radius:8px; border:1px solid var(--color-border);" />`;
+        };
+      }
+      openModal("add-entry-modal");
+    }
+
+    async function handleDeleteEntry(cat, entryId) {
+      const inBracket = (cat.rounds || []).some(r => r.some(m => m.e1 === entryId || m.e2 === entryId));
+      let msg = "이 작품을 삭제하시겠습니까?";
+      if (cat.status !== 'draft' && inBracket) {
+        msg = "⚠ 이 작품은 현재 진행 중인 토너먼트에 포함되어 있습니다.\n\n삭제하면 해당 분야의 토너먼트가 초기화되며, 지금까지의 투표 결과도 모두 사라집니다. 계속하시겠습니까?";
+      }
+      const ok = await confirmDialog("작품 삭제", msg);
+      if (!ok) return;
+      cat.entries = (cat.entries || []).filter(e => e.id !== entryId);
+      if (cat.status !== 'draft' && inBracket) {
+        cat.rounds = [];
+        cat.currentRound = 0;
+        cat.byeEntries = [];
+        cat.status = 'draft';
+        cat.resultsPublished = false;
+      }
+      await saveCategory(cat);
+      toast("삭제되었습니다.", "success");
+    }
+
+    async function handleStartTournament(cat) {
+      if ((cat.entries || []).length < 2) {
+        toast("작품이 2개 이상이어야 시작할 수 있습니다.", "warning");
+        return;
+      }
+      const ok = await confirmDialog("토너먼트 시작", `${cat.entries.length}개 작품으로 토너먼트를 시작하시겠습니까? 시작 후에는 작품을 추가/삭제할 수 없습니다.`);
+      if (!ok) return;
+      const { rounds, byeEntries } = generateTournament(cat.entries);
+      cat.rounds = rounds;
+      cat.byeEntries = byeEntries;
+      cat.currentRound = 0;
+      cat.status = 'active';
+      await saveCategory(cat);
+      toast("토너먼트가 시작되었습니다!", "success");
+    }
+
+    async function handlePublishResults(cat) {
+      let msg = "현재 진행 중인 토너먼트를 종료하고 결과를 공개하시겠습니까?\n\n공개 후에는 모든 투표 참여자가 결과를 볼 수 있습니다.";
+      if (cat.status === 'active') {
+        msg = "⚠ 아직 토너먼트가 진행 중입니다.\n\n결과를 공개하면 남은 경기는 현재 득표수 기준으로 자동 판정되며 (동점 시 랜덤), 이후 토너먼트가 종료됩니다. 계속하시겠습니까?";
+      }
+      const ok = await confirmDialog("결과 공개", msg);
+      if (!ok) return;
+
+      // Force-finalize any remaining rounds
+      while (cat.status === 'active') {
+        autoAdvanceRound(cat);
+      }
+      cat.resultsPublished = true;
+      await saveCategory(cat);
+      toast("결과가 공개되었습니다!", "success");
+    }
+
+    async function handleUnpublishResults(cat) {
+      const ok = await confirmDialog("결과 비공개 전환", "결과를 다시 비공개로 전환하시겠습니까? 투표 참여자에게는 결과가 보이지 않게 됩니다.");
+      if (!ok) return;
+      cat.resultsPublished = false;
+      await saveCategory(cat);
+      toast("결과가 비공개로 전환되었습니다.", "success");
+    }
+
+    async function handlePublishAll() {
+      const ok = await confirmDialog(
+        "전체 결과 공개",
+        "⚠ 모든 공모 분야의 토너먼트를 종료하고 결과를 공개하시겠습니까?\n\n아직 진행 중인 분야는 현재 득표수 기준으로 자동 판정됩니다 (동점 시 랜덤). 계속하시겠습니까?"
+      );
+      if (!ok) return;
+      for (const cat of state.categories) {
+        if (cat.status === 'draft') continue; // skip not-started
+        while (cat.status === 'active') autoAdvanceRound(cat);
+        cat.resultsPublished = true;
+        await saveCategory(cat);
+      }
+      toast("모든 분야의 결과가 공개되었습니다!", "success");
+    }
+
+    async function handleResetTournament(cat) {
+      const ok = await confirmDialog("토너먼트 초기화", "토너먼트와 모든 투표 결과를 초기화하시겠습니까? 작품 목록은 유지됩니다.");
+      if (!ok) return;
+      cat.rounds = [];
+      cat.currentRound = 0;
+      cat.status = 'draft';
+      cat.byeEntries = [];
+      await saveCategory(cat);
+      toast("토너먼트를 초기화했습니다.", "success");
+    }
+
+    // ---- PREVIEW -----------------------------------------------------
+    async function previewEntry(cat, entryId) {
+      const entry = (cat.entries || []).find(e => e.id === entryId);
+      if (!entry) return;
+      const body = document.getElementById("preview-body");
+      if (cat.type === 'poem') {
+        body.innerHTML = `
+          <div class="entry-poem" style="gap:18px;">
+            ${(entry.lines || []).map((t,i) => `
+              <div class="line">
+                <span class="char">${POEM_CHARS[i]}</span>
+                <span class="text">${escapeHtml(t || '')}</span>
+              </div>
+            `).join("")}
+          </div>
+          ${entry.author ? `<div class="text-muted mt-16" style="font-size:13px;">작성자: ${escapeHtml(entry.author)}</div>` : ''}
+        `;
+      } else if (cat.type === 'letter') {
+        body.innerHTML = `
+          ${entry.title ? `<h3 style="margin-bottom:12px;">${escapeHtml(entry.title)}</h3>` : ''}
+          <div style="white-space:pre-wrap; line-height:1.8; font-size:15px;">${escapeHtml(entry.body || '')}</div>
+          ${entry.author ? `<div class="text-muted mt-16" style="font-size:13px;">작성자: ${escapeHtml(entry.author)}</div>` : ''}
+        `;
+      } else {
+        body.innerHTML = `
+          ${entry.imageData ? `<img src="${entry.imageData}" style="width:100%; max-height:480px; object-fit:contain; border-radius:8px; background:#000;" />` : ''}
+          <div class="mt-16">${escapeHtml(entry.caption || '')}</div>
+          ${entry.author ? `<div class="text-muted mt-16" style="font-size:13px;">작성자: ${escapeHtml(entry.author)}</div>` : ''}
+        `;
+      }
+      openModal("preview-modal");
+    }
+
+    // Global delegate for preview buttons (on completed view)
+    document.addEventListener("click", async (e) => {
+      const t = e.target.closest("[data-preview-entry]");
+      if (t) {
+        const catId = t.dataset.previewCat;
+        const entryId = t.dataset.previewEntry;
+        const cat = await loadCategory(catId);
+        if (cat) previewEntry(cat, entryId);
+      }
+    });
+
+    // ---- HELPERS -----------------------------------------------------
+    function genId() { return "e_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }
+
+    function escapeHtml(s) {
+      if (s == null) return '';
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function escapeAttr(s) { return escapeHtml(s); }
+
+    function openModal(id) { document.getElementById(id).classList.add("open"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+    document.querySelectorAll("[data-close-modal]").forEach(el => {
+      el.addEventListener("click", () => closeModal(el.dataset.closeModal));
+    });
+
+    document.querySelectorAll(".modal-backdrop").forEach(bd => {
+      bd.addEventListener("click", (e) => {
+        if (e.target === bd) bd.classList.remove("open");
+      });
+    });
+
+    function toast(msg, type = "info") {
+      const c = document.getElementById("toast-container");
+      const t = document.createElement("div");
+      t.className = `toast ${type}`;
+      t.textContent = msg;
+      c.appendChild(t);
+      setTimeout(() => {
+        t.style.transition = "opacity 0.3s, transform 0.3s";
+        t.style.opacity = "0";
+        t.style.transform = "translateX(100%)";
+        setTimeout(() => t.remove(), 300);
+      }, 2800);
+    }
+
+    function confirmDialog(title, msg) {
+      return new Promise(resolve => {
+        document.getElementById("confirm-title").textContent = title;
+        document.getElementById("confirm-message").textContent = msg;
+        openModal("confirm-modal");
+        const yesBtn = document.getElementById("confirm-yes");
+        const handler = () => {
+          closeModal("confirm-modal");
+          yesBtn.removeEventListener("click", handler);
+          resolve(true);
+        };
+        yesBtn.addEventListener("click", handler);
+        const bd = document.getElementById("confirm-modal");
+        const observer = new MutationObserver(() => {
+          if (!bd.classList.contains("open")) {
+            yesBtn.removeEventListener("click", handler);
+            observer.disconnect();
+            resolve(false);
+          }
+        });
+        observer.observe(bd, { attributes: true, attributeFilter: ["class"] });
+      });
+    }
+
+    async function resizeImage(file, maxDim = 1600, quality = 0.85) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            let { width, height } = img;
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round(height * (maxDim / width));
+                width = maxDim;
+              } else {
+                width = Math.round(width * (maxDim / height));
+                height = maxDim;
+              }
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          };
+          img.onerror = reject;
+          img.src = reader.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ---- EVENT WIRING ------------------------------------------------
+    document.getElementById("brand").onclick = () => navigate('');
+    document.getElementById("admin-btn").onclick = () => {
+      if (state.isAdmin) {
+        navigate('admin');
+      } else {
+        openModal("admin-login-modal");
+      }
+    };
+
+    document.getElementById("admin-login-submit").onclick = () => {
+      const input = document.getElementById("admin-password-input");
+      if (input.value === ADMIN_PASSWORD) {
+        state.isAdmin = true;
+        closeModal("admin-login-modal");
+        input.value = "";
+        toast("관리자로 로그인되었습니다.", "success");
+        navigate('admin');
+      } else {
+        toast("비밀번호가 일치하지 않습니다.", "error");
+      }
+    };
+    document.getElementById("admin-password-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("admin-login-submit").click();
+    });
+
+    document.getElementById("add-entry-submit").onclick = handleAddEntrySubmit;
+
+    // ---- BOOT --------------------------------------------------------
+    (async () => {
+      await initFirebase();
+      handleRoute();
+    })();
+  </script>
+</body>
+</html>
