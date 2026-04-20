@@ -1230,8 +1230,10 @@
         throw new Error("이미 투표하셨습니다.");
       }
       const cat = await loadCategory(categoryId);
-      const round = cat.rounds[cat.currentRound];
-      if (!round) throw new Error("경기를 찾을 수 없습니다.");
+      // ★ rounds[x]는 이제 { matches: [...] } 형태
+      const roundObj = cat.rounds[cat.currentRound];
+      if (!roundObj) throw new Error("경기를 찾을 수 없습니다.");
+      const round = roundObj.matches || [];
       const match = round.find(m => m.id === matchId);
       if (!match) throw new Error("경기를 찾을 수 없습니다.");
       if (match.winner) throw new Error("이미 종료된 경기입니다.");
@@ -1251,7 +1253,9 @@
 
     function autoAdvanceRound(cat) {
       // Determine winners of current round, generate next round
-      const round = cat.rounds[cat.currentRound];
+      // ★ rounds[x]는 이제 { matches: [...] } 형태의 객체
+      const roundObj = cat.rounds[cat.currentRound];
+      const round = roundObj ? (roundObj.matches || []) : [];
       for (const m of round) {
         if (m.winner) continue;
         if (!m.e2) { m.winner = m.e1; continue; }
@@ -1267,6 +1271,7 @@
       if (winners.length === 1) {
         cat.status = 'completed'; // results still hidden until resultsPublished
       } else {
+        // ★ generateNextRound은 이제 { matches: [...] } 반환
         const nextRound = generateNextRound(winners);
         cat.rounds.push(nextRound);
         cat.currentRound = cat.rounds.length - 1;
@@ -1291,7 +1296,6 @@
       const rounds = [];
       const firstRound = [];
       // Pair them; if odd, last one gets a bye (auto-advance)
-      const byes = [];
       const n = shuffled.length;
       // Calculate next power of 2
       const pow2 = Math.pow(2, Math.ceil(Math.log2(n)));
@@ -1312,7 +1316,9 @@
           bye: !e2
         });
       }
-      rounds.push(firstRound);
+      // ★ Firestore는 배열 안의 배열(중첩 배열)을 지원하지 않으므로
+      //   rounds를 { matches: [...] } 형태의 객체 배열로 저장합니다.
+      rounds.push({ matches: firstRound });
       // Store byes for adding to round 2 later
       return { rounds, byeEntries };
     }
@@ -1331,7 +1337,8 @@
           bye: !shuffled[i+1]
         });
       }
-      return next;
+      // ★ 객체 형태로 반환 (Firestore 중첩 배열 문제 방지)
+      return { matches: next };
     }
 
     function roundName(matches, totalRounds, currentIdx) {
@@ -1539,10 +1546,11 @@
 
       let roundInfo = "-";
       if (c.status === 'active' && c.rounds?.length) {
-        const round = c.rounds[c.currentRound];
-        if (round) {
+        // ★ rounds[x]는 이제 { matches: [...] } 형태
+        const roundObj = c.rounds[c.currentRound];
+        if (roundObj && roundObj.matches) {
           const total = calcTotalRounds(entryCount);
-          roundInfo = roundName(round, total, c.currentRound);
+          roundInfo = roundName(roundObj.matches, total, c.currentRound);
         }
       } else if (c.resultsPublished) {
         roundInfo = "🏆";
@@ -1604,7 +1612,9 @@
       let totalQueue = 0;
       let votedQueue = 0;
       for (const cat of activeCats) {
-        const round = cat.rounds[cat.currentRound] || [];
+        // ★ rounds[x]는 이제 { matches: [...] } 형태
+        const roundObj = cat.rounds[cat.currentRound];
+        const round = roundObj ? (roundObj.matches || []) : [];
         const entries = new Map((cat.entries || []).map(e => [e.id, e]));
         for (const m of round) {
           if (m.bye || m.winner) continue;
@@ -1639,9 +1649,11 @@
       const { cat, match, entries } = queueItems[0];
       const e1 = entries.get(match.e1);
       const e2 = entries.get(match.e2);
-      const round = cat.rounds[cat.currentRound];
+      // ★ rounds[x]는 이제 { matches: [...] } 형태
+      const curRoundObj = cat.rounds[cat.currentRound];
+      const curRoundMatches = curRoundObj ? (curRoundObj.matches || []) : [];
       const total = calcTotalRounds((cat.entries || []).length);
-      const rName = roundName(round, total, cat.currentRound);
+      const rName = roundName(curRoundMatches, total, cat.currentRound);
       const pct = totalQueue === 0 ? 100 : Math.round((votedQueue / totalQueue) * 100);
 
       main.innerHTML = `
@@ -1745,15 +1757,17 @@
     function renderVoterCompleted(c) {
       // Compute ranking: winner is last round's winner. For simplicity show winner + bracket summary
       const entries = new Map(c.entries.map(e => [e.id, e]));
-      const finalRound = c.rounds[c.rounds.length - 1];
-      const finalMatch = finalRound?.[0];
+      // ★ rounds[x]는 이제 { matches: [...] } 형태
+      const finalRoundObj = c.rounds[c.rounds.length - 1];
+      const finalMatch = finalRoundObj?.matches?.[0];
       const winnerId = finalMatch?.winner;
       const runnerUpId = finalMatch ? (winnerId === finalMatch.e1 ? finalMatch.e2 : finalMatch.e1) : null;
 
       // Semi-finalists: losers of round before final
-      const semiRound = c.rounds[c.rounds.length - 2];
+      const semiRoundObj = c.rounds[c.rounds.length - 2];
+      const semiRound = semiRoundObj?.matches || [];
       const thirdPlaces = [];
-      if (semiRound) {
+      if (semiRound.length > 0) {
         for (const m of semiRound) {
           if (m.winner && m.e1 && m.e2) {
             const loserId = m.winner === m.e1 ? m.e2 : m.e1;
@@ -1889,19 +1903,21 @@
 
       const statusBlock = (() => {
         if (c.status === 'active') {
-          const round = c.rounds[c.currentRound];
+          // ★ rounds[x]는 이제 { matches: [...] } 형태
+          const roundObj = c.rounds[c.currentRound];
+          const round = roundObj ? (roundObj.matches || []) : [];
           return `
             <div class="bracket-info">
               <div>상태: <strong>진행 중</strong></div>
               <div>현재 라운드: <strong>${roundName(round, total, c.currentRound)}</strong> (${c.currentRound + 1}/${total})</div>
-              <div>이번 라운드 경기: <strong>${(round || []).length}개</strong></div>
+              <div>이번 라운드 경기: <strong>${round.length}개</strong></div>
             </div>
           `;
         }
         if (c.status === 'completed') {
           return `<div class="bracket-info"><div>상태: <strong>토너먼트 종료</strong></div><div>총 ${entries.length}개 작품 · ${c.rounds.length}라운드 진행</div></div>`;
         }
-        return `<div class="bracket-info"><div>상태: <strong>준비 중</strong></div><div>작품을 등록한 후 토너먼트를 시작하세요.</div></div>`;
+        return `<div class="bracket-info"><div>상태: <strong>준비 중</strong></div><div>작품을 등록한 후 토너먼트를 시작하세요. · <strong>🗑️ 전체 초기화</strong> 버튼으로 작품 포함 완전 초기화 가능</div></div>`;
       })();
 
       main.innerHTML = `
@@ -1914,7 +1930,8 @@
             ${c.status === 'draft' ? `<button class="btn btn-primary" id="start-tournament">▶ 토너먼트 시작</button>` : ''}
             ${(c.status === 'active' || c.status === 'completed') && !c.resultsPublished ? `<button class="btn btn-accent" id="publish-results">🏁 결과 공개</button>` : ''}
             ${c.resultsPublished ? `<button class="btn btn-secondary" id="unpublish-results">결과 비공개 전환</button>` : ''}
-            ${c.status !== 'draft' ? `<button class="btn btn-secondary" id="reset-tournament">토너먼트 초기화</button>` : ''}
+            ${c.status !== 'draft' ? `<button class="btn btn-secondary" id="reset-tournament">🔄 투표 초기화</button>` : ''}
+            <button class="btn btn-danger btn-sm" id="full-reset-category" title="작품 목록 포함 전체 초기화">🗑️ 전체 초기화</button>
           </div>
         </div>
 
@@ -1946,7 +1963,7 @@
               <h4>토너먼트 대진표</h4>
             </div>
             <div class="rounds-list">
-              ${c.rounds.map((round, idx) => renderAdminRoundBlock(round, idx, c, total)).join("")}
+              ${c.rounds.map((roundObj, idx) => renderAdminRoundBlock(roundObj.matches || [], idx, c, total)).join("")}
             </div>
           </div>
         ` : ''}
@@ -1962,6 +1979,8 @@
       if (unpublishBtn) unpublishBtn.onclick = () => handleUnpublishResults(c);
       const resetBtn = document.getElementById("reset-tournament");
       if (resetBtn) resetBtn.onclick = () => handleResetTournament(c);
+      const fullResetBtn = document.getElementById("full-reset-category");
+      if (fullResetBtn) fullResetBtn.onclick = () => handleFullResetCategory(c);
       document.querySelectorAll("[data-del-entry]").forEach(el => el.onclick = () => handleDeleteEntry(c, el.dataset.delEntry));
       document.querySelectorAll("[data-prv-entry]").forEach(el => el.onclick = () => previewEntry(c, el.dataset.prvEntry));
       document.querySelectorAll("[data-edit-entry]").forEach(el => el.onclick = () => openEditEntryModal(c, el.dataset.editEntry));
@@ -2151,10 +2170,15 @@
           if (addEntryContext.imageData) entry.imageData = addEntryContext.imageData;
         }
         entry.author = author;
-        await saveCategory(cat);
-        toast("작품이 수정되었습니다.", "success");
-        closeModal("add-entry-modal");
-        addEntryContext = null;
+        try {
+          await saveCategory(cat);
+          toast("작품이 수정되었습니다.", "success");
+          closeModal("add-entry-modal");
+          addEntryContext = null;
+        } catch (e) {
+          console.error("작품 수정 오류:", e);
+          toast("저장 중 오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
+        }
         return;
       }
 
@@ -2194,10 +2218,15 @@
         cat.status = 'draft';
         cat.resultsPublished = false;
       }
-      await saveCategory(cat);
-      toast("작품이 등록되었습니다.", "success");
-      closeModal("add-entry-modal");
-      addEntryContext = null;
+      try {
+        await saveCategory(cat);
+        toast("작품이 등록되었습니다.", "success");
+        closeModal("add-entry-modal");
+        addEntryContext = null;
+      } catch (e) {
+        console.error("작품 등록 오류:", e);
+        toast("저장 중 오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
+      }
     }
 
     function openEditEntryModal(cat, entryId) {
@@ -2270,23 +2299,29 @@
     }
 
     async function handleDeleteEntry(cat, entryId) {
-      const inBracket = (cat.rounds || []).some(r => r.some(m => m.e1 === entryId || m.e2 === entryId));
+      // ★ rounds[x]는 이제 { matches: [...] } 형태
+      const inBracket = (cat.rounds || []).some(r => (r.matches || []).some(m => m.e1 === entryId || m.e2 === entryId));
       let msg = "이 작품을 삭제하시겠습니까?";
       if (cat.status !== 'draft' && inBracket) {
         msg = "⚠ 이 작품은 현재 진행 중인 토너먼트에 포함되어 있습니다.\n\n삭제하면 해당 분야의 토너먼트가 초기화되며, 지금까지의 투표 결과도 모두 사라집니다. 계속하시겠습니까?";
       }
       const ok = await confirmDialog("작품 삭제", msg);
       if (!ok) return;
-      cat.entries = (cat.entries || []).filter(e => e.id !== entryId);
-      if (cat.status !== 'draft' && inBracket) {
-        cat.rounds = [];
-        cat.currentRound = 0;
-        cat.byeEntries = [];
-        cat.status = 'draft';
-        cat.resultsPublished = false;
+      try {
+        cat.entries = (cat.entries || []).filter(e => e.id !== entryId);
+        if (cat.status !== 'draft' && inBracket) {
+          cat.rounds = [];
+          cat.currentRound = 0;
+          cat.byeEntries = [];
+          cat.status = 'draft';
+          cat.resultsPublished = false;
+        }
+        await saveCategory(cat);
+        toast("삭제되었습니다.", "success");
+      } catch (e) {
+        console.error("작품 삭제 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
       }
-      await saveCategory(cat);
-      toast("삭제되었습니다.", "success");
     }
 
     async function handleStartTournament(cat) {
@@ -2296,13 +2331,19 @@
       }
       const ok = await confirmDialog("토너먼트 시작", `${cat.entries.length}개 작품으로 토너먼트를 시작하시겠습니까? 시작 후에는 작품을 추가/삭제할 수 없습니다.`);
       if (!ok) return;
-      const { rounds, byeEntries } = generateTournament(cat.entries);
-      cat.rounds = rounds;
-      cat.byeEntries = byeEntries;
-      cat.currentRound = 0;
-      cat.status = 'active';
-      await saveCategory(cat);
-      toast("토너먼트가 시작되었습니다!", "success");
+      try {
+        const { rounds, byeEntries } = generateTournament(cat.entries);
+        cat.rounds = rounds;
+        cat.byeEntries = byeEntries;
+        cat.currentRound = 0;
+        cat.status = 'active';
+        cat.resultsPublished = false;
+        await saveCategory(cat);
+        toast("토너먼트가 시작되었습니다!", "success");
+      } catch (e) {
+        console.error("토너먼트 시작 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
+      }
     }
 
     async function handlePublishResults(cat) {
@@ -2312,14 +2353,18 @@
       }
       const ok = await confirmDialog("결과 공개", msg);
       if (!ok) return;
-
-      // Force-finalize any remaining rounds
-      while (cat.status === 'active') {
-        autoAdvanceRound(cat);
+      try {
+        // Force-finalize any remaining rounds
+        while (cat.status === 'active') {
+          autoAdvanceRound(cat);
+        }
+        cat.resultsPublished = true;
+        await saveCategory(cat);
+        toast("결과가 공개되었습니다!", "success");
+      } catch (e) {
+        console.error("결과 공개 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
       }
-      cat.resultsPublished = true;
-      await saveCategory(cat);
-      toast("결과가 공개되었습니다!", "success");
     }
 
     async function handleUnpublishResults(cat) {
@@ -2336,24 +2381,62 @@
         "⚠ 모든 공모 분야의 토너먼트를 종료하고 결과를 공개하시겠습니까?\n\n아직 진행 중인 분야는 현재 득표수 기준으로 자동 판정됩니다 (동점 시 랜덤). 계속하시겠습니까?"
       );
       if (!ok) return;
-      for (const cat of state.categories) {
-        if (cat.status === 'draft') continue; // skip not-started
-        while (cat.status === 'active') autoAdvanceRound(cat);
-        cat.resultsPublished = true;
-        await saveCategory(cat);
+      try {
+        for (const cat of state.categories) {
+          if (cat.status === 'draft') continue; // skip not-started
+          while (cat.status === 'active') autoAdvanceRound(cat);
+          cat.resultsPublished = true;
+          await saveCategory(cat);
+        }
+        toast("모든 분야의 결과가 공개되었습니다!", "success");
+      } catch (e) {
+        console.error("전체 결과 공개 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
       }
-      toast("모든 분야의 결과가 공개되었습니다!", "success");
     }
 
     async function handleResetTournament(cat) {
-      const ok = await confirmDialog("토너먼트 초기화", "토너먼트와 모든 투표 결과를 초기화하시겠습니까? 작품 목록은 유지됩니다.");
+      const ok = await confirmDialog(
+        "토너먼트 초기화",
+        "토너먼트와 모든 투표 결과를 초기화하시겠습니까?\n\n✅ 작품 목록은 유지됩니다.\n✅ 초기화 후 작품을 추가/수정/삭제하고 다시 토너먼트를 시작할 수 있습니다."
+      );
       if (!ok) return;
-      cat.rounds = [];
-      cat.currentRound = 0;
-      cat.status = 'draft';
-      cat.byeEntries = [];
-      await saveCategory(cat);
-      toast("토너먼트를 초기화했습니다.", "success");
+      try {
+        cat.rounds = [];
+        cat.currentRound = 0;
+        cat.status = 'draft';
+        cat.byeEntries = [];
+        cat.resultsPublished = false;  // ★ 결과 공개 상태도 초기화
+        await saveCategory(cat);
+        toast("토너먼트를 초기화했습니다. 작품을 수정한 후 다시 시작하세요.", "success");
+      } catch (e) {
+        console.error("토너먼트 초기화 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
+      }
+    }
+
+    // ---- FULL CLEAR (작품 포함 전체 초기화) ----------------------------
+    async function handleFullResetCategory(cat) {
+      const ok = await confirmDialog(
+        "전체 초기화 (작품 포함)",
+        `⚠ 이 분야(${cat.name} · ${cat.source})의 모든 작품과 투표 데이터를 완전히 삭제합니다.\n\n` +
+        "✅ 삭제 후 작품을 새로 등록하고 처음부터 다시 시작할 수 있습니다.\n\n" +
+        "이 작업은 되돌릴 수 없습니다. 정말 전체 초기화하시겠습니까?"
+      );
+      if (!ok) return;
+      try {
+        cat.entries = [];
+        cat.rounds = [];
+        cat.currentRound = 0;
+        cat.status = 'draft';
+        cat.byeEntries = [];
+        cat.resultsPublished = false;
+        await saveCategory(cat);
+        toast("전체 초기화 완료! 작품을 새로 등록한 후 토너먼트를 시작하세요.", "success");
+      } catch (e) {
+        console.error("전체 초기화 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
+      }
     }
 
     // ---- PREVIEW -----------------------------------------------------
