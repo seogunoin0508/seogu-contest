@@ -1067,6 +1067,11 @@
     // 관리자 비밀번호 (원하는 값으로 변경하세요)
     const ADMIN_PASSWORD = "admin1234";
 
+    // ★ 라운드 자동 진행에 필요한 경기당 최소 득표 합계
+    // 예: 40 → 한 경기(A vs B)에 A+B 합산 40표 이상 모이면 자동으로 다음 라운드 진행
+    // 현장 참가 인원이 더 적을 경우 관리자가 "강제 라운드 마감" 버튼으로 수동 진행 가능
+    let MIN_VOTES_TO_ADVANCE = 40;
+
     const FIREBASE_CONFIGURED = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_");
 
     // ---- CATEGORY DEFINITIONS ----------------------------------------
@@ -1240,10 +1245,12 @@
       if (choice === "e1") match.v1 = (match.v1 || 0) + 1;
       else match.v2 = (match.v2 || 0) + 1;
 
-      // Auto-advance: if every match in this round has at least 1 vote (or is a bye/decided),
-      // determine winners and generate the next round automatically.
-      const allVoted = round.every(m => m.winner || m.bye || (m.v1 || 0) + (m.v2 || 0) >= 1);
-      if (allVoted) {
+      // ★ 자동 라운드 진행: 라운드의 모든 경기에 MIN_VOTES_TO_ADVANCE 표 이상 쌓이면 다음 라운드로 진행
+      // 부전승(bye)이나 이미 승자가 결정된 경기는 자동 통과 처리
+      const allReachedThreshold = round.every(m =>
+        m.winner || m.bye || (m.v1 || 0) + (m.v2 || 0) >= MIN_VOTES_TO_ADVANCE
+      );
+      if (allReachedThreshold) {
         autoAdvanceRound(cat);
       }
 
@@ -1591,19 +1598,36 @@
       const activeCats = cats.filter(c => c.status === 'active');
 
       if (activeCats.length === 0) {
-        // No active tournaments
+        // 모든 분야가 완료(completed)된 상태인지 확인
+        const allCompleted = cats.every(c => c.status === 'completed' || c.resultsPublished);
+        const anyCompleted = cats.some(c => c.status === 'completed' || c.resultsPublished);
         const anyDraft = cats.some(c => c.status === 'draft');
-        main.innerHTML = `
-          <a class="back-link" id="back-home">◀ 처음으로</a>
-          <div class="state-card mt-24">
-            <span class="emoji">⏳</span>
-            <h3>아직 투표가 시작되지 않았습니다</h3>
-            <p>${anyDraft ? '관리자가 토너먼트를 시작하면 이곳에서 투표하실 수 있습니다.' : '진행 중인 투표가 없습니다.'}</p>
-            <button class="btn btn-secondary" id="home-btn">처음으로</button>
-          </div>
-        `;
-        document.getElementById("back-home").onclick = () => navigate('');
-        document.getElementById("home-btn").onclick = () => navigate('');
+
+        if (anyCompleted) {
+          // 투표가 모두 끝났거나 결과 발표 대기 중
+          main.innerHTML = `
+            <div class="state-card mt-24" style="padding:60px 32px;">
+              <span class="emoji">🙏</span>
+              <h3>모든 분야에 대한 투표를 마치셨습니다</h3>
+              <p style="font-size:16px; line-height:1.8; margin-top:12px;">
+                28일 오후 2시 투표 결과가 공개됩니다.<br/>
+                <strong>감사합니다.</strong>
+              </p>
+            </div>
+          `;
+        } else {
+          main.innerHTML = `
+            <a class="back-link" id="back-home">◀ 처음으로</a>
+            <div class="state-card mt-24">
+              <span class="emoji">⏳</span>
+              <h3>아직 투표가 시작되지 않았습니다</h3>
+              <p>${anyDraft ? '관리자가 토너먼트를 시작하면 이곳에서 투표하실 수 있습니다.' : '진행 중인 투표가 없습니다.'}</p>
+              <button class="btn btn-secondary" id="home-btn">처음으로</button>
+            </div>
+          `;
+          document.getElementById("back-home")?.addEventListener("click", () => navigate(''));
+          document.getElementById("home-btn")?.addEventListener("click", () => navigate(''));
+        }
         return;
       }
 
@@ -1628,20 +1652,15 @@
 
       if (queueItems.length === 0) {
         main.innerHTML = `
-          <a class="back-link" id="back-home">◀ 처음으로</a>
-          <div class="state-card mt-24">
+          <div class="state-card mt-24" style="padding:60px 32px;">
             <span class="emoji">🙏</span>
-            <h3>현재 라운드의 투표를 모두 완료했습니다</h3>
-            <p>
-              소중한 참여에 감사드립니다.<br/>
-              다음 라운드가 시작되면 새로운 경기가 추가됩니다.<br/>
-              잠시 후 다시 방문하거나 창을 열어두시면 자동으로 갱신됩니다.
+            <h3>모든 분야에 대한 투표를 마치셨습니다</h3>
+            <p style="font-size:16px; line-height:1.8; margin-top:12px;">
+              28일 오후 2시 투표 결과가 공개됩니다.<br/>
+              <strong>감사합니다.</strong>
             </p>
-            <button class="btn btn-secondary" id="home-btn">처음으로</button>
           </div>
         `;
-        document.getElementById("back-home").onclick = () => navigate('');
-        document.getElementById("home-btn").onclick = () => navigate('');
         return;
       }
 
@@ -1906,11 +1925,27 @@
           // ★ rounds[x]는 이제 { matches: [...] } 형태
           const roundObj = c.rounds[c.currentRound];
           const round = roundObj ? (roundObj.matches || []) : [];
+          // 이번 라운드 득표 현황 계산
+          const votableMatches = round.filter(m => !m.bye && !m.winner && m.e2);
+          const minVotes = votableMatches.length > 0
+            ? Math.min(...votableMatches.map(m => (m.v1 || 0) + (m.v2 || 0)))
+            : 0;
+          const pct = Math.min(100, Math.round((minVotes / MIN_VOTES_TO_ADVANCE) * 100));
           return `
             <div class="bracket-info">
               <div>상태: <strong>진행 중</strong></div>
               <div>현재 라운드: <strong>${roundName(round, total, c.currentRound)}</strong> (${c.currentRound + 1}/${total})</div>
               <div>이번 라운드 경기: <strong>${round.length}개</strong></div>
+              <div style="width:100%; margin-top:8px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                  <span>득표 현황 (경기당 최소 득표 기준)</span>
+                  <span><strong>${minVotes} / ${MIN_VOTES_TO_ADVANCE}표</strong></span>
+                </div>
+                <div style="height:8px; background:var(--color-border); border-radius:100px; overflow:hidden;">
+                  <div style="height:100%; width:${pct}%; background:linear-gradient(90deg,var(--color-primary),var(--color-accent)); border-radius:100px; transition:width 0.4s;"></div>
+                </div>
+                <div style="font-size:11px; color:var(--color-text-light); margin-top:4px;">${pct >= 100 ? '✅ 임계값 달성 — 자동 진행 예정' : `목표까지 ${MIN_VOTES_TO_ADVANCE - minVotes}표 남음 · 부족하면 강제 라운드 마감 버튼 사용`}</div>
+              </div>
             </div>
           `;
         }
@@ -1928,6 +1963,7 @@
           </div>
           <div class="flex-gap">
             ${c.status === 'draft' ? `<button class="btn btn-primary" id="start-tournament">▶ 토너먼트 시작</button>` : ''}
+            ${c.status === 'active' ? `<button class="btn btn-secondary" id="force-advance-round">⏭ 강제 라운드 마감</button>` : ''}
             ${(c.status === 'active' || c.status === 'completed') && !c.resultsPublished ? `<button class="btn btn-accent" id="publish-results">🏁 결과 공개</button>` : ''}
             ${c.resultsPublished ? `<button class="btn btn-secondary" id="unpublish-results">결과 비공개 전환</button>` : ''}
             ${c.status !== 'draft' ? `<button class="btn btn-secondary" id="reset-tournament">🔄 투표 초기화</button>` : ''}
@@ -1979,6 +2015,8 @@
       if (unpublishBtn) unpublishBtn.onclick = () => handleUnpublishResults(c);
       const resetBtn = document.getElementById("reset-tournament");
       if (resetBtn) resetBtn.onclick = () => handleResetTournament(c);
+      const forceAdvanceBtn = document.getElementById("force-advance-round");
+      if (forceAdvanceBtn) forceAdvanceBtn.onclick = () => handleForceAdvanceRound(c);
       const fullResetBtn = document.getElementById("full-reset-category");
       if (fullResetBtn) fullResetBtn.onclick = () => handleFullResetCategory(c);
       document.querySelectorAll("[data-del-entry]").forEach(el => el.onclick = () => handleDeleteEntry(c, el.dataset.delEntry));
@@ -2411,6 +2449,31 @@
         toast("토너먼트를 초기화했습니다. 작품을 수정한 후 다시 시작하세요.", "success");
       } catch (e) {
         console.error("토너먼트 초기화 오류:", e);
+        toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
+      }
+    }
+
+    // ---- FORCE ADVANCE ROUND (강제 라운드 마감) -------------------------
+    async function handleForceAdvanceRound(cat) {
+      if (cat.status !== 'active') return;
+      const roundObj = cat.rounds[cat.currentRound];
+      const round = roundObj ? (roundObj.matches || []) : [];
+      const votableMatches = round.filter(m => !m.bye && !m.winner && m.e2);
+      const minVotes = votableMatches.length > 0
+        ? Math.min(...votableMatches.map(m => (m.v1 || 0) + (m.v2 || 0)))
+        : 0;
+      const ok = await confirmDialog(
+        "강제 라운드 마감",
+        `현재 경기당 최소 득표 수는 ${minVotes}표입니다 (목표: ${MIN_VOTES_TO_ADVANCE}표).\n\n` +
+        `아직 목표에 미달하더라도 현재 득표 수 기준으로 이번 라운드를 마감하고 다음 라운드로 진행합니다.\n\n(동점 시 무작위 선정) 계속하시겠습니까?`
+      );
+      if (!ok) return;
+      try {
+        autoAdvanceRound(cat);
+        await saveCategory(cat);
+        toast("라운드를 강제 마감하고 다음 라운드로 진행했습니다.", "success");
+      } catch (e) {
+        console.error("강제 라운드 마감 오류:", e);
         toast("오류가 발생했습니다: " + (e.message || "저장 실패"), "error");
       }
     }
