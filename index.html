@@ -1565,7 +1565,14 @@
     }
 
     // 관리자 강제 마감용: 현재 라운드 기준으로 미완료 경기의 승자를 현재 득표로 확정
+    // 동점일 경우 "먼저 접수된 작품"(낮은 addedAt)이 우선합니다. (결과 페이지에서는 공동 순위로도 안내)
     function forceFinalizeTournament(cat) {
+      const entryMap = new Map((cat.entries || []).map(e => [e.id, e]));
+      const addedAtOf = (id) => {
+        const e = entryMap.get(id);
+        const t = e && e.addedAt;
+        return typeof t === 'number' ? t : Number.MAX_SAFE_INTEGER;
+      };
       cat.rounds.forEach(r => {
         (r.matches || []).forEach(m => {
           if (m.winner) return;
@@ -1581,7 +1588,10 @@
           const v2 = (m.entryVotes || {})[e2] || 0;
           if (v1 > v2) m.winner = e1;
           else if (v2 > v1) m.winner = e2;
-          else m.winner = Math.random() < 0.5 ? e1 : e2;
+          else {
+            // 득표 동점 — 먼저 접수된 작품이 토너먼트 진출
+            m.winner = addedAtOf(e1) <= addedAtOf(e2) ? e1 : e2;
+          }
         });
       });
       cat.status = 'completed';
@@ -2153,34 +2163,65 @@
     }
 
     function renderVoterCompleted(c) {
-      const entryMap = new Map(c.entries.map(e => [e.id, e]));
-      const allMatches = c.rounds.flatMap(r => r.matches || []);
+      const entryMap = new Map((c.entries || []).map(e => [e.id, e]));
 
-      // 결승 경기: 마지막 라운드의 비부전승 경기
+      // 결승(마지막 라운드 비부전승 경기)
       const finalRound = c.rounds[c.rounds.length - 1];
-      const finalMatch = (finalRound?.matches || []).find(m => !m.bye);
-      const winnerId = finalMatch?.winner || null;
+      const finalMatch = (finalRound?.matches || []).find(m => !m.bye) || null;
 
-      // 준우승: 결승에서 진 쪽
-      let runnerUpId = null;
-      if (finalMatch && winnerId) {
+      // 준결승(마지막-1 라운드 비부전승 경기들)
+      const semiRound = c.rounds.length >= 2 ? c.rounds[c.rounds.length - 2] : null;
+      const semiMatches = (semiRound?.matches || []).filter(m => !m.bye);
+
+      // 결과 항목 목록 생성
+      //   각 항목: { rank, entry, votes, tieReason? }
+      //   - 동점이면 같은 rank 를 공유하며 tieReason 을 표시합니다.
+      const rows = [];
+
+      if (finalMatch) {
         const { e1, e2 } = getEffectiveEntries(finalMatch, c);
-        runnerUpId = e1 === winnerId ? e2 : e1;
+        const v1 = (finalMatch.entryVotes || {})[e1] || 0;
+        const v2 = (finalMatch.entryVotes || {})[e2] || 0;
+
+        if (e1 && e2 && v1 === v2) {
+          // 결승 득표 동점 → 공동 1위 (2위는 비워둠)
+          const reason = `결승 경기 득표가 동점(${v1}표 : ${v2}표)이어서 공동 1위입니다.`;
+          rows.push({ rank: 1, entry: entryMap.get(e1), votes: v1, tieReason: reason });
+          rows.push({ rank: 1, entry: entryMap.get(e2), votes: v2, tieReason: reason });
+        } else if (e1 && e2) {
+          const firstId  = v1 >  v2 ? e1 : e2;
+          const secondId = v1 >  v2 ? e2 : e1;
+          rows.push({ rank: 1, entry: entryMap.get(firstId),  votes: (finalMatch.entryVotes || {})[firstId]  || 0 });
+          rows.push({ rank: 2, entry: entryMap.get(secondId), votes: (finalMatch.entryVotes || {})[secondId] || 0 });
+        } else if (e1) {
+          // 결승이 부전승이 된 특수 케이스
+          rows.push({ rank: 1, entry: entryMap.get(e1), votes: v1 });
+        }
       }
 
-      // 3위: 준결승(마지막-1 라운드)에서 진 작품들
-      const semiRound = c.rounds.length >= 2 ? c.rounds[c.rounds.length - 2] : null;
-      const thirdPlaces = [];
-      (semiRound?.matches || []).filter(m => !m.bye).forEach(m => {
+      // 3위 후보: 준결승에서 진 작품들
+      const semiLosers = [];
+      semiMatches.forEach(m => {
         const { e1, e2 } = getEffectiveEntries(m, c);
-        const loser = e1 === m.winner ? e2 : e1;
-        if (loser) {
-          const votes = (m.entryVotes || {})[loser] || 0;
-          thirdPlaces.push({ id: loser, votes });
-        }
+        if (!e1 || !e2) return; // 준결승이 부전승이면 3위 없음
+        const loserId = m.winner === e1 ? e2 : e1;
+        const votes = (m.entryVotes || {})[loserId] || 0;
+        semiLosers.push({ id: loserId, votes });
       });
 
-      const getVotesForEntry = (match, entryId) => (match?.entryVotes || {})[entryId] || 0;
+      if (semiLosers.length === 1) {
+        rows.push({ rank: 3, entry: entryMap.get(semiLosers[0].id), votes: semiLosers[0].votes });
+      } else if (semiLosers.length >= 2) {
+        // 준결승 패자 중 최다 득표 → 3위. 동점이면 공동 3위.
+        const maxVotes = Math.max(...semiLosers.map(s => s.votes));
+        const top = semiLosers.filter(s => s.votes === maxVotes);
+        if (top.length === 1) {
+          rows.push({ rank: 3, entry: entryMap.get(top[0].id), votes: top[0].votes });
+        } else {
+          const reason = `준결승에서 탈락한 작품들의 득표가 동점(각 ${maxVotes}표)이어서 공동 3위입니다.`;
+          top.forEach(s => rows.push({ rank: 3, entry: entryMap.get(s.id), votes: s.votes, tieReason: reason }));
+        }
+      }
 
       main.innerHTML = `
         <a class="back-link" id="back-home">◀ 처음으로</a>
@@ -2198,29 +2239,31 @@
         </div>
 
         <div class="finalists">
-          ${winnerId ? renderFinalistRow(1, entryMap.get(winnerId), c.type, getVotesForEntry(finalMatch, winnerId)) : ''}
-          ${runnerUpId ? renderFinalistRow(2, entryMap.get(runnerUpId), c.type, getVotesForEntry(finalMatch, runnerUpId)) : ''}
-          ${thirdPlaces.map(tp => renderFinalistRow(3, entryMap.get(tp.id), c.type, tp.votes)).join("")}
+          ${rows.map(r => renderFinalistRow(r.rank, r.entry, c.type, r.votes, r.tieReason)).join("")}
         </div>
       `;
       document.getElementById("back-home").onclick = () => navigate('');
     }
 
-    function renderFinalistRow(rank, entry, type, voteCount) {
+    function renderFinalistRow(rank, entry, type, voteCount, tieReason) {
       if (!entry) return '';
       const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
-      const rankText = rank === 1 ? '우승' : rank === 2 ? '준우승' : '3위';
+      const rankText = `${rank}위`;
       let summary = '';
       if (type === 'poem') summary = (entry.lines || []).filter(Boolean).join(' / ');
       else if (type === 'letter') summary = (entry.title || (entry.body || '').slice(0, 40));
       else summary = entry.caption || '';
       return `
         <div class="finalist-row">
-          <div class="finalist-rank ${rankClass}">${rankText}</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:4px; min-width:64px;">
+            <div class="finalist-rank ${rankClass}">${rankText}</div>
+            ${tieReason ? `<div style="font-size:11px; color:#b24d08; font-weight:600; text-align:center; line-height:1.25;">공동</div>` : ''}
+          </div>
           <div style="min-width:0;">
             <div style="font-weight:600; color:var(--color-text); margin-bottom:4px;">${escapeHtml(type === 'letter' ? (entry.title || '편지') : type === 'poem' ? '어버이날 4행시' : '사진 작품')}</div>
             <div style="font-size:13px; color:var(--color-text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(summary)}</div>
             ${voteCount > 0 ? `<div style="font-size:12px; color:var(--color-primary); margin-top:4px; font-weight:600;">${voteCount}표</div>` : ''}
+            ${tieReason ? `<div style="font-size:12px; color:#b24d08; margin-top:6px; padding:6px 10px; background:#fff3e6; border:1px dashed #f0c79f; border-radius:6px; line-height:1.4;">ℹ️ ${escapeHtml(tieReason)}</div>` : ''}
           </div>
           <button class="btn btn-secondary btn-sm" data-preview-entry="${entry.id}" data-preview-cat="${(state.category||{}).id||''}">자세히 보기</button>
         </div>
