@@ -355,6 +355,115 @@
       letter-spacing: 0.3px;
     }
 
+    /* ── 라운드 안내 배너 ────────────────────────────── */
+    .round-banner {
+      background: linear-gradient(135deg, #eef4ff 0%, #e0ebff 100%);
+      border: 1.5px solid #b4ccff;
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin: 16px 0 14px;
+      box-shadow: 0 4px 14px rgba(30, 58, 95, 0.06);
+    }
+    .round-banner .round-stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 14px;
+    }
+    .round-banner .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+    .round-banner .step .dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #c8d6ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #8193b1;
+      transition: all 0.25s ease;
+    }
+    .round-banner .step.done .dot {
+      background: #a9c2f2;
+      border-color: #7099e0;
+      color: #fff;
+    }
+    .round-banner .step.current .dot {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+      transform: scale(1.18);
+      box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.15);
+    }
+    .round-banner .step .label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8193b1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80px;
+    }
+    .round-banner .step.current .label { color: var(--color-primary); font-weight: 800; font-size: 12px; }
+    .round-banner .step.done .label { color: #6485b8; }
+    .round-banner .connector {
+      flex: 0 0 auto;
+      height: 2px;
+      background: #c8d6ee;
+      align-self: flex-start;
+      margin-top: 15px;
+      min-width: 8px;
+      width: 100%;
+      max-width: 64px;
+    }
+    .round-banner .connector.done { background: #7099e0; }
+
+    .round-banner .round-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .round-banner .round-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1.2;
+    }
+    .round-banner .round-position {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6485b8;
+      background: #ffffffaa;
+      padding: 2px 10px;
+      border-radius: 999px;
+      border: 1px solid #c8d6ee;
+    }
+    .round-banner .round-desc {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #3a4a66;
+      padding-top: 8px;
+      border-top: 1px dashed #c8d6ee;
+      margin-top: 8px;
+    }
+    .round-banner .round-desc strong { color: var(--color-primary); }
+
+    @media (max-width: 520px) {
+      .round-banner .step .label { font-size: 10px; max-width: 60px; }
+      .round-banner .round-title { font-size: 19px; }
+    }
+
     .progress-wrap {
       margin-bottom: 28px;
     }
@@ -1609,6 +1718,23 @@
       return currentIdx === 0 ? "1라운드" : `${currentIdx + 1}라운드`;
     }
 
+    // 각 라운드가 어떤 단계인지 간단한 설명을 반환
+    function getRoundDescription(rName, currentIdx, totalRounds) {
+      if (rName === '결승') {
+        return '마지막 두 작품의 대결입니다. 승자가 <strong>1위</strong>, 패자가 <strong>2위</strong>가 됩니다.';
+      }
+      if (rName === '준결승') {
+        return '4개 작품이 맞붙는 단계입니다. 이기면 <strong>결승</strong>으로, 지면 <strong>3위 후보</strong>가 됩니다.';
+      }
+      if (rName === '8강') {
+        return '8개 작품이 4개 경기로 맞붙는 단계입니다. 이긴 작품만 다음 라운드로 올라갑니다.';
+      }
+      if (currentIdx === 0) {
+        return '전체 작품을 2개씩 짝지어 비교하는 <strong>첫 대결</strong>입니다. 두 작품 중 더 마음에 드는 쪽을 선택해 주세요.';
+      }
+      return '앞선 라운드를 통과한 작품들이 다시 겨루는 단계입니다. 더 마음에 드는 쪽을 선택해 주세요.';
+    }
+
     function calcTotalRounds(entryCount) {
       if (entryCount <= 1) return 1;
       let rounds = 0, n = entryCount;
@@ -1962,6 +2088,22 @@
       // 종목별 테마 설명
       const themeDesc = getCategoryThemeDesc(cat);
 
+      // 라운드 스테퍼용 데이터 — 각 라운드의 이름과 상태(완료/진행중/대기)
+      const totalRoundsOfCat = cat.rounds.length;
+      const roundSteps = cat.rounds.map((r, idx) => ({
+        idx,
+        name: roundName(r, totalRoundsOfCat, idx),
+        state: idx < pendingRoundIdx ? 'done' : (idx === pendingRoundIdx ? 'current' : 'pending'),
+      }));
+      const roundDesc = getRoundDescription(rName, pendingRoundIdx, totalRoundsOfCat);
+      const stepperHtml = roundSteps.map((s, i) => `
+        ${i > 0 ? `<div class="connector ${s.state === 'pending' ? '' : 'done'}"></div>` : ''}
+        <div class="step ${s.state}">
+          <div class="dot">${s.state === 'done' ? '✓' : (i + 1)}</div>
+          <div class="label">${s.name}</div>
+        </div>
+      `).join('');
+
       main.innerHTML = `
         <a class="back-link" id="back-home">◀ 처음으로</a>
 
@@ -1979,15 +2121,21 @@
           ${themeDesc ? `<div class="theme-desc">${themeDesc}</div>` : ''}
         </div>
 
-        <div class="vote-header" style="margin-top:8px;">
-          <div>
-            <div class="round-pill">⚔️ ${rName}</div>
+        <div class="round-banner" id="round-banner">
+          ${totalRoundsOfCat > 1 ? `
+          <div class="round-stepper">
+            ${stepperHtml}
+          </div>` : ''}
+          <div class="round-title-row">
+            <div class="round-title">⚔️ ${rName}</div>
+            <div class="round-position">${pendingRoundIdx + 1} / ${totalRoundsOfCat} 라운드 · 전체 진행률 ${pct}%</div>
           </div>
-          <div style="font-size:13px; color:var(--color-text-muted); font-weight:500; text-align:right;">
-            전체 진행률 ${pct}%<br/>
-            <span style="color:var(--color-text-light); font-size:12px;">
-              이 종목 남은 경기 ${catPendingCount}개${upcomingCount > 0 ? `<br/>이후 ${upcomingCount}개 종목 대기` : ''}
-            </span>
+          <div class="round-desc">${roundDesc}</div>
+        </div>
+
+        <div class="vote-header" style="margin-top:8px;">
+          <div style="font-size:13px; color:var(--color-text-muted); font-weight:500;">
+            이 종목 남은 경기 <strong style="color:var(--color-primary);">${catPendingCount}개</strong>${upcomingCount > 0 ? ` · 이후 <strong style="color:var(--color-primary);">${upcomingCount}개 종목</strong> 대기` : ''}
           </div>
         </div>
         ${nextCat ? `
