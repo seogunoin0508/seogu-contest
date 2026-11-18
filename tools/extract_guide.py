@@ -63,6 +63,25 @@ def ocr_page(pdf, page, tmp):
     return re.sub(r"\n\s*\n+", "\n", out).strip()
 
 
+def figure_pages(pdf):
+    """본문 그림(표·흐름도 등)이 있는 쪽. 여러 쪽에 반복되는 장식 이미지는 제외하고,
+    3쪽 이하에만 쓰인 2제곱인치 이상의 이미지가 있는 쪽을 고른다."""
+    from collections import defaultdict
+    lines = run(["pdfimages", "-list", pdf]).stdout.splitlines()[2:]
+    rows, pages_of = [], defaultdict(set)
+    for l in lines:
+        f = l.split()
+        try:
+            page = int(f[0])
+            obj = f[10] if f[10] != "[inline]" else f"i{page}_{f[1]}"
+            w_in, h_in = int(f[3]) / float(f[-4]), int(f[4]) / float(f[-3])
+        except (ValueError, IndexError, ZeroDivisionError):
+            continue
+        rows.append((page, obj, w_in, h_in))
+        pages_of[obj].add(page)
+    return sorted({p for p, o, w, h in rows if len(pages_of[o]) <= 3 and w * h >= 2.0 and min(w, h) >= 0.6})
+
+
 def pypdf_lengths(pdf):
     try:
         import pypdf
@@ -99,18 +118,23 @@ def main():
     h_ocr = [len(HANGUL.findall(o)) for o in ocr]
     # OCR에서만 보이는 한글이 많으면 = 그림 속 글자
     img_text = [i for i in range(len(pages)) if h_ocr[i] - h_txt[i] >= 40 and h_ocr[i] >= 1.3 * h_txt[i]]
+    lens = [len(re.sub(r"\s", "", p)) for p in pages]
+    # 표지·간지(글자 거의 없음)는 제외한 본문 그림 쪽
+    figs = {p - 1 for p in figure_pages(pdf) if p - 1 < len(pages) and lens[p - 1] >= 30} | set(img_text)
 
     with open(os.path.join(outdir, base + ".txt"), "w", encoding="utf-8") as f:
         f.write(f"# {base}\n# 원본: {os.path.basename(pdf)} / 총 {n}쪽\n")
         f.write(f"# 인쇄 쪽 = PDF 쪽 - {main_off} (본문 기준)\n")
         f.write("# [그림·표 속 글자(OCR)] 블록은 자동 인식이라 오탈자가 있을 수 있음 → 숫자·금액은 원본 PDF 쪽에서 확인\n")
+        f.write("# 쪽 머리에 '그림 있음'이 붙은 쪽은 표·흐름도가 그림으로 들어 있음 → 관련 질문이면 원본 쪽을 이미지로 열어 확인\n")
         for i, p in enumerate(pages):
             label = f"인쇄 {nums[i]}쪽" if nums[i] is not None else "인쇄 쪽번호 없음"
+            if i in figs:
+                label += " | 그림 있음"
             f.write(f"\n<<<PDF {i + 1}쪽 | {label}>>>\n{p.rstrip()}\n")
             if i in img_text:
                 f.write("\n[그림·표 속 글자(OCR) 시작 — 오탈자 가능]\n" + ocr[i] + "\n[그림·표 속 글자(OCR) 끝]\n")
 
-    lens = [len(re.sub(r"\s", "", p)) for p in pages]
     alt = pypdf_lengths(pdf)
     mismatch = []
     if alt and len(alt) == len(lens):
@@ -129,6 +153,7 @@ def main():
         f.write(f"- pypdf 교차검증 차이 15% 초과 쪽: {mismatch}\n")
         f.write(f"- OCR 실행: {'예' if use_ocr else '아니오'}\n")
         f.write(f"- **그림·표 속 글자를 OCR로 보완한 쪽 ({len(img_text)}쪽, PDF 쪽 번호)**: {[i + 1 for i in img_text]}\n")
+        f.write(f"- **본문 그림이 있는 쪽 ({len(figs)}쪽, PDF 쪽 번호)** — 그림 속 내용은 원본 이미지로 확인 필요: {sorted(i + 1 for i in figs)}\n")
         f.write(f"- 글자가 거의 없는 쪽(표지·간지·빈 쪽 추정, 30자 미만): {empty}\n")
     print(f"{base}: {len(pages)}/{n}쪽, OCR보완 {len(img_text)}쪽, 깨짐 {len(broken)}, 불일치 {len(mismatch)}, 글꼴경고 {font_warn}")
 
